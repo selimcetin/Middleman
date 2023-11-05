@@ -23,94 +23,112 @@ public class Program
         int currPlayerIdx = 0;
         int day = 1;
 
+
+
         GameController.init();
+ 
 
-        while(true)
+        while (true)
         {
-            string input = "";
-            Middleman currMiddleman = GameController.liMiddlemen[currPlayerIdx];
-
-            switch (state)
+            try
             {
-                case GameState.NewTurn:
-                    UiController.displayNewTurn(currMiddleman, day);
+                string input = "";
+                Middleman currMiddleman = GameController.liMiddlemen[currPlayerIdx];
 
-                    state = GameState.WaitForInput;
-                    break;
-                case GameState.WaitForInput:
-                    input = Console.ReadLine();
+                switch (state)
+                {
+                    case GameState.NewTurn:
+                        UiController.displayNewTurn(currMiddleman, day);
 
-                    switch (input)
-                    {
-                        case "b":
-                            currPlayerIdx++;
-                            state = GameState.NewTurn;
+                        state = GameState.WaitForInput;
+                        break;
+                    case GameState.WaitForInput:
+                        input = Console.ReadLine();
 
-                            // Increment day, reset index and switch order
-                            //--------------------------------------------
-                            if (currPlayerIdx == GameController.liMiddlemen.Count())
-                            {
-                                day++;
-                                currPlayerIdx = 0;
+                        switch (input)
+                        {
+                            case "b":
+                                currPlayerIdx++;
+                                state = GameState.NewTurn;
 
-                                Utils.switchListOrder(GameController.liMiddlemen);
-                            }
-                            break;
-                        case "e":
-                            state = GameState.Buying;
-                            break;
-                        case "v":
-                            state = GameState.Selling;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case GameState.Buying:
-                    UiController.displayBuyingOption(GameController.liProducts);
+                                // Increment day, reset index and switch order
+                                //--------------------------------------------
+                                if (currPlayerIdx == GameController.liMiddlemen.Count())
+                                {
+                                    day++;
+                                    currPlayerIdx = 0;
 
-                    input = Console.ReadLine();
+                                    Utils.switchListOrder(GameController.liMiddlemen);
+                                }
+                                break;
+                            case "e":
+                                state = GameState.Buying;
+                                break;
+                            case "v":
+                                state = GameState.Selling;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case GameState.Buying:
+                        UiController.displayBuyingOption(GameController.liProducts);
 
-                    switch (input)
-                    {
-                        case "z":
-                            state = GameState.NewTurn;
-                            break;
-                        default:
-                            Product p = Product.getProductByIdx(input, GameController.liProducts);
-                            UiController.displayProductToBuy(p);
-                            int inputIdx = Utils.convertStringToInt(input);
-                            int quantity = Utils.convertStringToInt(Console.ReadLine());
-                            GameController.buyProductViaInput(currMiddleman, inputIdx, quantity);
+                        input = Console.ReadLine();
 
-                            state = GameState.NewTurn;
-                            break;
-                    }
-                    break;
-                case GameState.Selling:
-                    Console.WriteLine("Produkte im Besitz:");
-                    UiController.displayStock(currMiddleman);
-                    Console.WriteLine("z) Zurück");
+                        switch (input)
+                        {
+                            case "z":
+                                state = GameState.NewTurn;
+                                break;
+                            default:
+                                int inputIdx = Utils.convertStringToInt(input);
+                                Product p = GameController.getProductByIdx(inputIdx);
+                                UiController.displayProductToBuy(p);
 
-                    input = Console.ReadLine();
+                                int quantity = Utils.convertStringToInt(Console.ReadLine());
+                                GameController.buyProductViaInput(currMiddleman, inputIdx, quantity);
 
-                    switch (input)
-                    {
-                        case "z":
-                            state = GameState.NewTurn;
-                            break;
-                        default:
-                            Product p = Product.getProductByIdx(input, GameController.liProducts);
-                            UiController.displayProductToSell(currMiddleman, p);
-                            int inputIdx = Utils.convertStringToInt(input);
-                            int quantity = Utils.convertStringToInt(Console.ReadLine());
-                            GameController.sellProductViaInput(currMiddleman, inputIdx, quantity);
+                                state = GameState.NewTurn;
+                                break;
+                        }
+                        break;
+                    case GameState.Selling:
+                        Console.WriteLine("Produkte im Besitz:");
+                        UiController.displayStock(currMiddleman);
+                        Console.WriteLine("z) Zurück");
 
-                            state = GameState.NewTurn;
-                            break;
-                    }
-                    break;
+                        input = Console.ReadLine();
+
+                        switch (input)
+                        {
+                            case "z":
+                                state = GameState.NewTurn;
+                                break;
+                            default:
+                                int inputIdx = Utils.convertStringToInt(input);
+                                Product p = GameController.getProductByIdx(inputIdx);
+                                UiController.displayProductToSell(currMiddleman, p);
+                                
+                                int quantity = Utils.convertStringToInt(Console.ReadLine());
+                                GameController.sellProductViaInput(currMiddleman, inputIdx, quantity);
+
+                                state = GameState.NewTurn;
+                                break;
+                        }
+                        break;
+                }
             }
+            catch (GameException ex)
+            {
+                Console.WriteLine($"Spielfehler: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Anwendungsfehler: {ex.Message}");
+            }
+
+
         }
     }
 }

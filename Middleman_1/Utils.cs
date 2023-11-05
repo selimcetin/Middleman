@@ -49,7 +49,7 @@ namespace Middleman_1
                 }
                 else
                 {
-                    Console.WriteLine("The file does not exist.");
+                    Console.WriteLine("The product.yml file does not exist.");
                     return null;
                 }
             }

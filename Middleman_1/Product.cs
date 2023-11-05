@@ -11,10 +11,14 @@ namespace Middleman_1
         private string name;
         private int durability;
         private int baseprice;
+        private int minProductionRate;
+        private int maxProductionRate;
 
         public string Name { get => name; set => name = value; }
         public int Durability { get => durability; set => durability = value; }
         public int Baseprice { get => baseprice; set => baseprice = value; }
+        public int MinProductionRate { get => minProductionRate; set => minProductionRate = value; }
+        public int MaxProductionRate { get => maxProductionRate; set => maxProductionRate = value; }
 
         public Product(string name, int durability, int price)
         {
@@ -27,23 +31,6 @@ namespace Middleman_1
         {
            
         }
-
-
-        public static Product getProductByIdx(string strIdx, List<Product> liProducts)
-        {
-            if (Utils.IsNumeric(strIdx))
-            {
-                int tempIdx = int.Parse(strIdx);
-
-                if(tempIdx <= liProducts.Count)
-                {
-                    return liProducts[tempIdx-1];
-                }
-            }
-            return null;
-        }
-
-
 
         public override string? ToString()
         {

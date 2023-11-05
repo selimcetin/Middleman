@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleman_1", "Middleman_1\Middleman_1.csproj", "{33978B7E-D5B9-43F0-868D-F22E65F7402D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleman_1", "Middleman_1\Middleman_1.csproj", "{33978B7E-D5B9-43F0-868D-F22E65F7402D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{3599A933-C2CF-4D56-A92F-424B78141DFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

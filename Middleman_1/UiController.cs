@@ -11,7 +11,12 @@ public class UiController
     public static int getIntFromReadLinePrompt(string text)
     {
         Console.Write(text);
-        return int.Parse(Console.ReadLine());
+        int value;
+        if (!int.TryParse(Console.ReadLine(), out value))
+        {
+            throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben");
+        }
+        return value;
     }
 
     public static string getStringFromReadLinePrompt(string text)
@@ -20,9 +25,9 @@ public class UiController
         return Console.ReadLine();
     }
 
-    public static void displayNewTurn(Middleman middleman, int day)
+    public static void displayNewTurn(Middleman m, int day)
     {
-        Console.WriteLine($"{middleman.Name} von {middleman.CompanyName} | ${middleman.Balance} | Tag {day}");
+        Console.WriteLine($"{m.Name} von {m.CompanyName} | ${m.Balance} | Lager: {m.StockCount}/{m.StockCapacity} | Tag {day}");
         Console.WriteLine("e) Einkaufen");
         Console.WriteLine("v) Verkaufen");
         Console.WriteLine("b) Runde beenden");
