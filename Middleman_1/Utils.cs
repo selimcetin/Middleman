@@ -25,6 +25,42 @@ namespace Middleman_1
             }
         }
 
+        public static List<Product> parseYaml(string pathToFile)
+        {
+            List<Product> products = new List<Product>();
+
+            string text = File.ReadAllText(pathToFile);
+
+            string[] yamlItems = text.Split('-');
+
+            foreach (string yamlItem in yamlItems)
+            {
+                
+            }
+        }
+
+        public static Product getProductFromYamlItem(string yamlItem)
+        {
+            string[] yamlLines = yamlItem.Split(
+                            new string[] { "\r\n", "\r", "\n" },
+                            StringSplitOptions.None );
+            
+            foreach(string yamlLine in yamlLines)
+            {
+                string temp;
+
+                if (yamlLine.IndexOf('-') != -1)
+                {
+                    temp = yamlLine.Remove(yamlLine.IndexOf('-'), 1);
+                }
+               
+                string description = temp.Substring(0, temp.IndexOf(':')).Trim();
+                string value = temp.Substring(temp.IndexOf(':'), temp.Length - 1).Trim();
+            }
+
+            int idxColon = yamlItem.IndexOf(':');
+        }
+
         public static List<Product> parseYamlFile(string pathToFile)
         {
             string filePath = pathToFile;
