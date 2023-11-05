@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Middleman_1
 {
-    internal class Product
+    public class Product
     {
         private string name;
         private int durability;
@@ -28,13 +28,6 @@ namespace Middleman_1
            
         }
 
-        public static void displayProducts(List<Product> liProducts)
-        {
-            for(int i=1; i <= liProducts.Count; i++)
-            {
-                Console.WriteLine($"{i}) {liProducts[i-1].ToString()}");
-            }
-        }
 
         public static Product getProductByIdx(string strIdx, List<Product> liProducts)
         {
@@ -50,13 +43,7 @@ namespace Middleman_1
             return null;
         }
 
-        public static void displayProductToBuy(Product p)
-        {
-            if (null != p)
-            {
-                Console.WriteLine($"Wie viel von {p.Name} kaufen?");
-            }
-        }
+
 
         public override string? ToString()
         {

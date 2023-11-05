@@ -95,6 +95,19 @@ namespace Middleman_1
             return product;
         }
 
+        public static int convertStringToInt(string str)
+        {
+            if(IsNumeric(str))
+            {
+                return int.Parse(str);
+            }
+            else
+            {
+                // TODO Error handling
+                return 0;
+            }
+        }
+
         public static bool IsNumeric(string input)
         {
             // Try to parse the input as a number (int, double, etc.)
