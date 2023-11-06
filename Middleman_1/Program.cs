@@ -12,10 +12,9 @@ public class Program
         WaitForInput,
         Buying,
         Selling,
+        StockAdjustment,
         GameEnd
     }
-
-    
 
     static void Main()
     {
@@ -23,10 +22,7 @@ public class Program
         int currPlayerIdx = 0;
         int day = 1;
 
-
-
         GameController.init();
- 
 
         while (true)
         {
@@ -51,18 +47,23 @@ public class Program
                                 currPlayerIdx++;
                                 state = GameState.NewTurn;
 
-                                // Increment day, reset index and switch order
-                                //--------------------------------------------
+                                // Day is over, start new day
+                                //---------------------------
                                 if (currPlayerIdx == GameController.liMiddlemen.Count())
                                 {
                                     day++;
                                     currPlayerIdx = 0;
 
                                     Utils.switchListOrder(GameController.liMiddlemen);
+                                    GameController.dailyRandomProductionRate();
+                                    GameController.dailyRandomPriceAdjustment();
                                 }
                                 break;
                             case "e":
                                 state = GameState.Buying;
+                                break;
+                            case "l":
+                                state = GameState.StockAdjustment;
                                 break;
                             case "v":
                                 state = GameState.Selling;
@@ -127,8 +128,6 @@ public class Program
             {
                 Console.WriteLine($"Anwendungsfehler: {ex.Message}");
             }
-
-
         }
     }
 }

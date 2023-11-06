@@ -10,31 +10,28 @@ namespace Middleman_1
     {
         private string name;
         private int durability;
-        private int baseprice;
+        private int basePrice;
         private int minProductionRate;
         private int maxProductionRate;
+        private int availableAmount;
+        private int buyingPrice;
 
         public string Name { get => name; set => name = value; }
         public int Durability { get => durability; set => durability = value; }
-        public int Baseprice { get => baseprice; set => baseprice = value; }
+        public int BasePrice { get => basePrice; set => basePrice = value; }
         public int MinProductionRate { get => minProductionRate; set => minProductionRate = value; }
         public int MaxProductionRate { get => maxProductionRate; set => maxProductionRate = value; }
-
-        public Product(string name, int durability, int price)
-        {
-            this.name = name;
-            this.durability = durability;
-            this.baseprice = price;
-        }
+        public int AvailableAmount { get => availableAmount; set => availableAmount = value; }
+        public int BuyingPrice { get => buyingPrice; set => buyingPrice = value; }
 
         public Product()
         {
-           
+            availableAmount = 0;
         }
 
         public override string? ToString()
         {
-            return $"{name} ({durability} Tage) ${baseprice}/Stück";
+            return $"{name} ({durability} Tage) ${buyingPrice}/Stück";
         }
     }
 }

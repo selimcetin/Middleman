@@ -18,7 +18,7 @@ namespace Middleman_1
 
         public GameController()
         {
-           
+
         }
 
         public static void init()
@@ -41,6 +41,8 @@ namespace Middleman_1
                         liMiddlemen.Add(new Middleman(middlemanName, companyName, difficulty));
                     }
 
+                    dailyRandomProductionRate();
+
                     break;
                 }
                 catch (GameException ex)
@@ -56,7 +58,7 @@ namespace Middleman_1
 
         public static void buyProduct(Middleman m, Product p, int quantity)
         {
-            int cost = p.Baseprice * quantity;
+            int cost = p.BuyingPrice * quantity;
             if (isValidPurchase(m, cost, quantity))
             {
                 m.Balance -= cost;
@@ -79,9 +81,9 @@ namespace Middleman_1
             }
         }
 
-        public static void sellProduct(Middleman m,Product p, int quantity)
+        public static void sellProduct(Middleman m, Product p, int quantity)
         {
-            int sellPrice = (int)(p.Baseprice * 0.8 * quantity);
+            int sellPrice = (int)(p.BasePrice * 0.8 * quantity);
 
             if (isValidSelling(m.Stock[p], quantity))
             {
@@ -101,7 +103,7 @@ namespace Middleman_1
             }
         }
 
-        public static void sellProductViaInput(Middleman m, int  idx, int quantity)
+        public static void sellProductViaInput(Middleman m, int idx, int quantity)
         {
             if (idx <= liProducts.Count)
             {
@@ -117,6 +119,82 @@ namespace Middleman_1
             }
 
             return null;
+        }
+
+        public static void dailyRandomProductionRate()
+        {
+            Random rnd = new Random();
+
+            foreach (Product p in liProducts)
+            {
+                int randomValue = rnd.Next(p.MinProductionRate, p.MaxProductionRate);
+                p.AvailableAmount += randomValue;
+            }
+        }
+
+        public static void dailyRandomPriceAdjustment()
+        {
+            Random rnd = new Random();
+
+            foreach (Product p in liProducts)
+            {
+                adjustProductPriceByRandomPercentage(p);
+            }
+        }
+
+        static void adjustProductPrice(Product p, int priceBasis, int percentage)
+        {
+            if (percentage > 0)
+                increaseProductPrice(p, priceBasis, percentage);
+            else
+                decreaseProductPrice(p, priceBasis, percentage);
+        }
+        static void increaseProductPrice(Product p, int priceBasis, int percentage)
+        {
+            int newPrice = (int) Math.Round(priceBasis * (1 + (percentage / 100.0) ), MidpointRounding.AwayFromZero);
+
+            if (newPrice > 3 * p.BasePrice)
+            {
+                p.BuyingPrice = 3 * p.BasePrice;
+            }
+
+            p.BuyingPrice = newPrice;
+        }
+
+        static void decreaseProductPrice(Product p, int priceBasis, int percentage)
+        {
+            int newPrice = (int)Math.Round(priceBasis * (1 + (percentage / 100.0)), MidpointRounding.AwayFromZero);
+
+            if (newPrice < 0.25 * p.BasePrice)
+            {
+                p.BuyingPrice = (int) Math.Round(0.25 * p.BasePrice, MidpointRounding.AwayFromZero);
+            }
+
+            p.BuyingPrice = newPrice;
+        }
+
+        static void adjustProductPriceByRandomPercentage(Product p)
+        {
+            Random rnd = new Random();
+            int maxAvailableAmount = p.MaxProductionRate * p.Durability;
+            float percentage = 100 * (p.AvailableAmount / maxAvailableAmount);
+            int randomPercentage = 0;
+
+            if (percentage < 25)
+            {
+                randomPercentage = rnd.Next(-10, 30);
+                adjustProductPrice(p, p.BasePrice, randomPercentage);
+            }
+            else if (percentage > 25 && percentage < 80)
+            {
+                randomPercentage = rnd.Next(-5, 5);
+                adjustProductPrice(p, p.BasePrice, randomPercentage);
+            }
+            else
+            {
+                randomPercentage = rnd.Next(-10, 6);
+                adjustProductPrice(p, p.BuyingPrice, randomPercentage);
+            }
         }
 
         static bool isValidPurchase(Middleman m, int cost, int quantity)

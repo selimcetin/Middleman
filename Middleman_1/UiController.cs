@@ -30,6 +30,7 @@ public class UiController
         Console.WriteLine($"{m.Name} von {m.CompanyName} | ${m.Balance} | Lager: {m.StockCount}/{m.StockCapacity} | Tag {day}");
         Console.WriteLine("e) Einkaufen");
         Console.WriteLine("v) Verkaufen");
+        Console.WriteLine("l) Lagerkapazität erhöhen");
         Console.WriteLine("b) Runde beenden");
     }
 
@@ -45,7 +46,7 @@ public class UiController
         for (int i = 0; i < m.Stock.Count; i++)
         {
             Product temp = m.Stock.ElementAt(i).Key;
-            int tempBasePrice = (int)(temp.Baseprice * 0.8);
+            int tempBasePrice = (int)(temp.BuyingPrice * 0.8);
 
             Console.WriteLine($"{i+1}) {temp.Name} ({m.Stock.ElementAt(i).Value}) ${tempBasePrice}/Stück");
         }

@@ -25,110 +25,68 @@ namespace Middleman_1
             }
         }
 
-        public static List<Product> parseYaml(string pathToFile)
+        public static List<Product> parseYamlFile(string pathToFile)
         {
             List<Product> products = new List<Product>();
-
             string text = File.ReadAllText(pathToFile);
-
-            string[] yamlItems = text.Split('-');
+            string[] yamlItems = text.Split("- ");
 
             foreach (string yamlItem in yamlItems)
             {
-                
+                if (yamlItem.Trim() == "")
+                    continue;
+
+                Product p = getProductFromYamlItem(yamlItem);
+
+                if (p != null )
+                    products.Add(p);
             }
+
+            return products;
         }
 
         public static Product getProductFromYamlItem(string yamlItem)
         {
+            Product p = new Product();
             string[] yamlLines = yamlItem.Split(
                             new string[] { "\r\n", "\r", "\n" },
-                            StringSplitOptions.None );
-            
-            foreach(string yamlLine in yamlLines)
-            {
-                string temp;
+                            StringSplitOptions.None);
 
-                if (yamlLine.IndexOf('-') != -1)
+            foreach (string yamlLine in yamlLines)
+            {
+                string temp = yamlLine;
+
+                temp = temp.Trim();
+
+                if (temp != "")
                 {
-                    temp = yamlLine.Remove(yamlLine.IndexOf('-'), 1);
+                    string description = temp.Substring(0, temp.IndexOf(':')).Trim();
+                    string value = temp.Substring(temp.IndexOf(':') + 2).Trim();
+
+                    passPropertyValuesToProduct(p, description, value);
                 }
-               
-                string description = temp.Substring(0, temp.IndexOf(':')).Trim();
-                string value = temp.Substring(temp.IndexOf(':'), temp.Length - 1).Trim();
             }
 
-            int idxColon = yamlItem.IndexOf(':');
+            p.BuyingPrice = p.BasePrice;
+
+            return p;
         }
 
-        public static List<Product> parseYamlFile(string pathToFile)
+        static void passPropertyValuesToProduct(Product p, string propertyName, string value)
         {
-            string filePath = pathToFile;
-            List<Product> list = new List<Product>();
+            Type type = p.GetType();
+            PropertyInfo[] properties = type.GetProperties();
 
-            try
+            foreach (PropertyInfo property in properties)
             {
-                if (File.Exists(filePath))
+                if(propertyName.ToLower() == property.Name.ToLower())
                 {
-                    string text = File.ReadAllText(filePath);
-                    string pattern = "- [aA-zZ]*: ([aA-zZ]|[0-9])*(\r\n)(  ([aA-zZ])*: ([aA-zZ]|[0-9])*(\r\n)*)*";
-
-                    MatchCollection matches = Regex.Matches(text, pattern);
-
-                    if (matches.Count > 0)
-                    {
-                        foreach(Match match in matches)
-                        {
-                            list.Add(getProductFromYamlObject(match.Value));
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("The product.yml file does not exist.");
-                    return null;
+                    if (IsNumeric(value))
+                        property.SetValue(p, convertStringToInt(value));
+                    else
+                        property.SetValue(p, value);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-            }
-
-            return list;
-        }
-
-        public static Product getProductFromYamlObject(string yamlObject)
-        {
-            string patternKey = "[aA-zZ]*:";
-            string patternValue = ": ([aA-zZ]|[0-9])*";
-            Product product = new Product();
-
-            MatchCollection matchesKey = Regex.Matches(yamlObject, patternKey);
-            MatchCollection matchesValue = Regex.Matches(yamlObject, patternValue);
-
-            if (matchesKey.Count > 0 && (matchesKey.Count == matchesValue.Count))
-            {
-                Type type = product.GetType();
-                PropertyInfo[] properties = type.GetProperties();
-                
-                for(int i=0; i < matchesKey.Count; i++)
-                {
-                    foreach (PropertyInfo property in properties)
-                    {
-                        if (matchesKey[i].Value.Contains(property.Name.ToLower()))
-                        {
-                            string yamlValue = matchesValue[i].Value.Remove(0, 2);
-
-                            if (IsNumeric(yamlValue))
-                                property.SetValue(product, int.Parse(yamlValue));
-                            else
-                                property.SetValue(product, yamlValue);
-                        }
-                    }
-                }
-            }
-
-            return product;
         }
 
         public static int convertStringToInt(string str)
