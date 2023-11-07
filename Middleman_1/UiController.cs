@@ -12,11 +12,28 @@ public class UiController
     {
         Console.Write(text);
         int value;
-        if (!int.TryParse(Console.ReadLine(), out value))
+        while(true)
         {
-            throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben");
+            try
+            {
+                if (!int.TryParse(Console.ReadLine(), out value))
+                {
+                    throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben");
+                }
+                else
+                {
+                    return value;
+                }
+            }
+            catch (GameException ex)
+            {
+                Console.WriteLine($"Spielfehler: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Anwendungsfehler: {ex.Message}");
+            }
         }
-        return value;
     }
 
     public static string getStringFromReadLinePrompt(string text)
@@ -41,7 +58,20 @@ public class UiController
         Console.WriteLine("z) Zurück");
     }
 
-    public static void displayStock(Middleman m)
+    public static void displaySellingOption(Middleman m)
+    {
+        Console.WriteLine("Produkte im Besitz:");
+        displayStock(m);
+        Console.WriteLine("z) Zurück");
+    }
+
+    public static void displayStockOptions()
+    {
+        Console.WriteLine("Erhöhung der Lagerkapazität kostet 50$ pro Einheit.");
+        Console.WriteLine("Um wie viel Einheiten soll Lager vergrößert werden? 1 Einheit = 50 Lager Kapazität.");
+    }
+
+    static void displayStock(Middleman m)
     {
         for (int i = 0; i < m.Stock.Count; i++)
         {
