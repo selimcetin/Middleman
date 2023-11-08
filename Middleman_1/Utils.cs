@@ -11,9 +11,10 @@ namespace Middleman_1
 {
     internal class Utils
     {
-        public static void switchListOrder<T>(List<T> list)
+        public static void leftShiftListOrder<T>(List<T> list)
         {
-            // This puts the first to the last index
+            // This method shifts the order to the left
+            // Left edge loops back to right edge
             // Example:
             // Input:  1, 2, 3, 4
             // Output: 2, 3, 4, 1
@@ -36,10 +37,10 @@ namespace Middleman_1
                 if (yamlItem.Trim() == "")
                     continue;
 
-                Product p = getProductFromYamlItem(yamlItem);
+                Product product = getProductFromYamlItem(yamlItem);
 
-                if (p != null )
-                    products.Add(p);
+                if (product != null )
+                    products.Add(product);
             }
 
             return products;
@@ -47,34 +48,37 @@ namespace Middleman_1
 
         public static Product getProductFromYamlItem(string yamlItem)
         {
-            Product p = new Product();
+            Product product = new Product();
+
+            // Split yaml file by all possible new line expressions
+            //-----------------------------------------------------
             string[] yamlLines = yamlItem.Split(
                             new string[] { "\r\n", "\r", "\n" },
                             StringSplitOptions.None);
 
             foreach (string yamlLine in yamlLines)
             {
-                string temp = yamlLine;
+                string yamlLineCopy = yamlLine;
 
-                temp = temp.Trim();
+                yamlLineCopy = yamlLineCopy.Trim();
 
-                if (temp != "")
+                if (yamlLineCopy != "")
                 {
-                    string description = temp.Substring(0, temp.IndexOf(':')).Trim();
-                    string value = temp.Substring(temp.IndexOf(':') + 2).Trim();
+                    string description = yamlLineCopy.Substring(0, yamlLineCopy.IndexOf(':')).Trim();
+                    string value = yamlLineCopy.Substring(yamlLineCopy.IndexOf(':') + 2).Trim();
 
-                    passPropertyValuesToProduct(p, description, value);
+                    passPropertyValuesToProduct(product, description, value);
                 }
             }
 
-            p.BuyingPrice = p.BasePrice;
+            product.BuyingPrice = product.BasePrice;
 
-            return p;
+            return product;
         }
 
-        static void passPropertyValuesToProduct(Product p, string propertyName, string value)
+        static void passPropertyValuesToProduct(Product product, string propertyName, string value)
         {
-            Type type = p.GetType();
+            Type type = product.GetType();
             PropertyInfo[] properties = type.GetProperties();
 
             foreach (PropertyInfo property in properties)
@@ -82,9 +86,9 @@ namespace Middleman_1
                 if(propertyName.ToLower() == property.Name.ToLower())
                 {
                     if (IsNumeric(value))
-                        property.SetValue(p, convertStringToInt(value));
+                        property.SetValue(product, convertStringToInt(value));
                     else
-                        property.SetValue(p, value);
+                        property.SetValue(product, value);
                 }
             }
         }
@@ -95,11 +99,8 @@ namespace Middleman_1
             {
                 return int.Parse(str);
             }
-            else
-            {
-                // TODO Error handling
-                return 0;
-            }
+
+            throw new GameException("Falsche Eingabe. Bitte eine Zahl eingeben.");
         }
 
         public static bool IsNumeric(string input)

@@ -10,19 +10,19 @@ namespace Middleman_1
     {
         private string name;
         private int durability;
-        private int basePrice;
+        private float basePrice;
         private int minProductionRate;
         private int maxProductionRate;
         private int availableAmount;
-        private int buyingPrice;
+        private float buyingPrice;
 
         public string Name { get => name; set => name = value; }
         public int Durability { get => durability; set => durability = value; }
-        public int BasePrice { get => basePrice; set => basePrice = value; }
+        public float BasePrice { get => basePrice; set => basePrice = value; }
         public int MinProductionRate { get => minProductionRate; set => minProductionRate = value; }
         public int MaxProductionRate { get => maxProductionRate; set => maxProductionRate = value; }
         public int AvailableAmount { get => availableAmount; set => availableAmount = value; }
-        public int BuyingPrice { get => buyingPrice; set => buyingPrice = value; }
+        public float BuyingPrice { get => buyingPrice; set => buyingPrice = value; }
 
         public Product()
         {
@@ -31,7 +31,7 @@ namespace Middleman_1
 
         public override string? ToString()
         {
-            return $"{name} ({durability} Tage) ${buyingPrice}/Stück";
+            return $"{name} ({durability} Tage) ${buyingPrice:F2}/Stück | Verfügbare Menge: {availableAmount}";
         }
     }
 }

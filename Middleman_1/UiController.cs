@@ -18,7 +18,7 @@ public class UiController
             {
                 if (!int.TryParse(Console.ReadLine(), out value))
                 {
-                    throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben");
+                    throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben.");
                 }
                 else
                 {
@@ -42,19 +42,19 @@ public class UiController
         return Console.ReadLine();
     }
 
-    public static void displayNewTurn(Middleman m, int day)
+    public static void displayNewTurn(Middleman middleman, int day)
     {
-        Console.WriteLine($"{m.Name} von {m.CompanyName} | ${m.Balance} | Lager: {m.StockCount}/{m.StockCapacity} | Tag {day}");
+        Console.WriteLine($"{middleman.Name} von {middleman.CompanyName} | ${middleman.Balance:F2} | Lager: {middleman.StockCount}/{middleman.StockCapacity} | Tag {day}");
         Console.WriteLine("e) Einkaufen");
         Console.WriteLine("v) Verkaufen");
         Console.WriteLine("l) Lagerkapazität erhöhen");
         Console.WriteLine("b) Runde beenden");
     }
 
-    public static void displayBuyingOption(List<Product> liProducts)
+    public static void displayBuyingOption(List<Product> products)
     {
         Console.WriteLine($"Verfügbare Produkte:");
-        displayProducts(liProducts);
+        displayProducts(products);
         Console.WriteLine("z) Zurück");
     }
 
@@ -71,41 +71,38 @@ public class UiController
         Console.WriteLine("Um wie viel Einheiten soll Lager vergrößert werden? 1 Einheit = 50 Lager Kapazität.");
     }
 
-    static void displayStock(Middleman m)
+    static void displayStock(Middleman middleman)
     {
-        for (int i = 0; i < m.Stock.Count; i++)
+        for (int i = 0; i < middleman.Stock.Count; i++)
         {
-            Product temp = m.Stock.ElementAt(i).Key;
-            int tempBasePrice = (int)(temp.BuyingPrice * 0.8);
+            Product product = middleman.Stock.ElementAt(i).Key;
+            float sellingPrice = product.BuyingPrice * 0.8f;
 
-            Console.WriteLine($"{i+1}) {temp.Name} ({m.Stock.ElementAt(i).Value}) ${tempBasePrice}/Stück");
+            Console.WriteLine($"{i+1}) {product.Name} ({middleman.Stock.ElementAt(i).Value}) ${sellingPrice:F2}/Stück");
         }
     }
 
-    public static void displayProducts(List<Product> liProducts)
+    public static void displayProducts(List<Product> products)
     {
-        for (int i = 1; i <= liProducts.Count; i++)
+        for (int i = 1; i <= products.Count; i++)
         {
-            Console.WriteLine($"{i}) {liProducts[i - 1].ToString()}");
+            Console.WriteLine($"{i}) {products[i - 1].ToString()}");
         }
     }
 
-    public static void displayProductToBuy(Product p)
+    public static void displayProductToBuy(Product product)
     {
-        if (null != p)
+        if (null != product)
         {
-            Console.WriteLine($"Wie viel von {p.Name} kaufen?");
+            Console.WriteLine($"Wie viel von {product.Name} kaufen?");
         }
     }
 
-    public static void displayProductToSell(Middleman m, Product p)
+    public static void displayProductToSell(Middleman middleman, Product product)
     {
-        if (m.Stock.ContainsKey(p))
+        if (middleman.Stock.ContainsKey(product))
         {
-            Console.WriteLine($"Wieviel von {p.Name} verkaufen (max. {m.Stock[p]})? ");
+            Console.WriteLine($"Wieviel von {product.Name} verkaufen (max. {middleman.Stock[product]})? ");
         }
     }
-
-
-
 }

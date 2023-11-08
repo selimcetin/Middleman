@@ -11,14 +11,14 @@ namespace Middleman_1
     {
         private string name;
         private string companyName;
-        private int balance;
+        private float balance;
         private Dictionary<Product, int> stock;
         private int stockCount;
         private int stockCapacity;
 
         public string Name { get => name; set => name = value; }
         public string CompanyName { get => companyName; set => companyName = value; }
-        public int Balance { get => balance; set => balance = value; }
+        public float Balance { get => balance; set => balance = value; }
         public Dictionary<Product, int> Stock { get => stock; set => stock = value; }
         public int StockCount { get => stockCount; set => stockCount = value; }
         public int StockCapacity { get => stockCapacity; set => stockCapacity = value; }
