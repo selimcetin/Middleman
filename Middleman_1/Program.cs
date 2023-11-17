@@ -8,9 +8,10 @@ public class Program
 {
     static void Main()
     {
-        GameInfo.init();
-        GameController.init();
+        GameInfo gameInfo = GameInfo.Instance; // Get Singleton
 
-        StateMachine.startStateMachine();
+        GameController.init(gameInfo);
+
+        StateMachine.startStateMachine(gameInfo);
     }
 }

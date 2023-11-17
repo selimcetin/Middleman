@@ -11,7 +11,7 @@ namespace Middleman_1
 {
     public static class GameController
     {
-        public static void init()
+        public static void init(GameInfo gameInfo)
         {
             int numberOfMiddleman = UiController.getIntFromReadLinePrompt("Wie viele Zwischenhändler nehmen teil? ");
 
@@ -23,12 +23,12 @@ namespace Middleman_1
                 string companyName = UiController.getStringFromReadLinePrompt($"Name der Firma von {middlemanName}: ");
                 int difficulty = UiController.getIntFromReadLinePrompt("Schwierigkeitsgrad auswählen (1) Einfach, (2) Normal, (3) Schwer: ");
 
-                GameInfo.MiddlemanList.Add(new Middleman(middlemanName, companyName, difficulty));
+                gameInfo.MiddlemanList.Add(new Middleman(middlemanName, companyName, difficulty));
             }
 
-            GameInfo.CurrentMiddleman = GameInfo.MiddlemanList[0];
+            gameInfo.CurrentMiddleman = gameInfo.MiddlemanList[0];
 
-            handleDailyProductionRateAdjustment();
+            handleDailyProductionRateAdjustment(gameInfo.ProductList);
         }
 
         public static void buyStockUpgrade(Middleman middleman, int quantity)
@@ -94,11 +94,11 @@ namespace Middleman_1
             }
         }
 
-        public static Product getProductFromList(int index)
+        public static Product getProductFromList(List<Product> productList, int index)
         {
-            if (index <= GameInfo.ProductList.Count)
+            if (index <= productList.Count)
             {
-                return GameInfo.ProductList[index - 1];
+                return productList[index - 1];
             }
 
             throw new GameException("Falsche Indexangabe für das Produkt. Bitte Index aus angezeigter Produktliste wählen.");
@@ -114,11 +114,11 @@ namespace Middleman_1
             throw new GameException("Falsche Indexangabe für das Produkt. Index muss <= Anzahl unterschiedlicher Produkte im Lager sein.");
         }
 
-        public static void handleDailyProductionRateAdjustment()
+        public static void handleDailyProductionRateAdjustment(List<Product> productList)
         {
             Random random = new Random();
 
-            foreach (Product product in GameInfo.ProductList)
+            foreach (Product product in productList)
             {
                 int randomValue = random.Next(product.MinProductionRate, product.MaxProductionRate);
                 product.AvailableAmount += randomValue;
@@ -130,11 +130,11 @@ namespace Middleman_1
             }
         }
 
-        public static void handleDailyPriceAdjustment()
+        public static void handleDailyPriceAdjustment(List<Product> productList)
         {
             Random random = new Random();
 
-            foreach (Product product in GameInfo.ProductList)
+            foreach (Product product in productList)
             {
                 adjustProductPriceByRandomPercentage(product);
             }
@@ -259,7 +259,7 @@ namespace Middleman_1
             return false;
         }
 
-        public static void payDailyStorageCost(Middleman middleman)
+        public static void payDailyStorageCost(Middleman middleman, List<Middleman> middlemanList)
         {
             float cost = middleman.getStockCount() * 5 + middleman.StockCapacity;
 
@@ -269,19 +269,19 @@ namespace Middleman_1
             }
             else
             {
-                removeMiddlemanFromList(middleman);
+                removeMiddlemanFromList(middleman, middlemanList);
                 UiController.displayLosingMiddleman(middleman);
             }
         }
 
-        public static void removeMiddlemanFromList(Middleman middleman)
+        public static void removeMiddlemanFromList(Middleman middleman, List<Middleman> middlemanList)
         {
-            GameInfo.MiddlemanList.Remove(middleman);
+            middlemanList.Remove(middleman);
         }
 
-        public static Boolean isNextDay()
+        public static Boolean isNextDay(List<Middleman> middlemanList, int currentPlayerIndex)
         {
-            if (GameInfo.CurrentPlayerIndex == GameInfo.MiddlemanList.Count())
+            if (currentPlayerIndex == middlemanList.Count())
             {
                 return true;
             }
@@ -289,10 +289,10 @@ namespace Middleman_1
             return false;
         }
 
-        public static void updateGameInfoForNextDay()
+        public static void updateGameInfoForNextDay(GameInfo gameInfo)
         {
-            GameInfo.Day++;
-            GameInfo.CurrentPlayerIndex = 0;
+            gameInfo.Day++;
+            gameInfo.CurrentPlayerIndex = 0;
         }
     }
 }
