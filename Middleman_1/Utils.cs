@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Middleman_1
 {
-    internal class Utils
+    public class Utils
     {
         public static void leftShiftListOrder<T>(List<T> list)
         {
@@ -85,7 +85,7 @@ namespace Middleman_1
             {
                 if(propertyName.ToLower() == property.Name.ToLower())
                 {
-                    if (IsNumeric(value))
+                    if (isNumeric(value))
                         property.SetValue(product, convertStringToInt(value));
                     else
                         property.SetValue(product, value);
@@ -95,7 +95,7 @@ namespace Middleman_1
 
         public static int convertStringToInt(string str)
         {
-            if(IsNumeric(str))
+            if(isNumeric(str))
             {
                 return int.Parse(str);
             }
@@ -103,7 +103,7 @@ namespace Middleman_1
             throw new GameException("Falsche Eingabe. Bitte eine Zahl eingeben.");
         }
 
-        public static bool IsNumeric(string input)
+        public static bool isNumeric(string input)
         {
             // Try to parse the input as a number (int, double, etc.)
             // If successful, it's a number; otherwise, it's not

@@ -59,5 +59,10 @@ namespace Middleman_1
 
             return count;
         }
+
+        public override string? ToString()
+        {
+            return $"{name} of company {companyName}";
+        }
     }
 }

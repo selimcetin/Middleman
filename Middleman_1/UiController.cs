@@ -42,7 +42,7 @@ public class UiController
         return Console.ReadLine();
     }
 
-    public static void displayNewTurn(Middleman middleman, int day)
+    public static void displayMenu(Middleman middleman, int day)
     {
         Console.WriteLine($"{middleman.Name} von {middleman.CompanyName} | ${middleman.Balance:F2} | Lager: {middleman.StockCount}/{middleman.StockCapacity} | Tag {day}");
         Console.WriteLine("e) Einkaufen");
@@ -58,10 +58,10 @@ public class UiController
         Console.WriteLine("z) Zurück");
     }
 
-    public static void displaySellingOption(Middleman m)
+    public static void displaySellingOption(Middleman middleman)
     {
         Console.WriteLine("Produkte im Besitz:");
-        displayStock(m);
+        displayStock(middleman);
         Console.WriteLine("z) Zurück");
     }
 
@@ -82,7 +82,7 @@ public class UiController
         }
     }
 
-    public static void displayProducts(List<Product> products)
+    static void displayProducts(List<Product> products)
     {
         for (int i = 1; i <= products.Count; i++)
         {
@@ -104,5 +104,10 @@ public class UiController
         {
             Console.WriteLine($"Wieviel von {product.Name} verkaufen (max. {middleman.Stock[product]})? ");
         }
+    }
+
+    public static void displayLosingMiddleman(Middleman middleman)
+    {
+        Console.WriteLine($"{middleman.ToString()} has lost the game.");
     }
 }

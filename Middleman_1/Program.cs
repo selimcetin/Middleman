@@ -6,18 +6,11 @@ using System.Reflection;
 
 public class Program
 {
-    
-
     static void Main()
     {
+        GameInfo.init();
         GameController.init();
 
-        GameController.startStateMachine();
+        StateMachine.startStateMachine();
     }
 }
-
-
-
-
-
-

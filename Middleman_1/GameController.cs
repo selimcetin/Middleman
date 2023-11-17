@@ -9,37 +9,13 @@ using System.Xml;
 
 namespace Middleman_1
 {
-    public class GameController
+    public static class GameController
     {
-        enum GameState
-        {
-            NewTurn,
-            SelectNextMove,
-            Buying,
-            Selling,
-            StockAdjustment,
-            GameEnd
-        }
-
-        static string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-
-        public static List<Middleman> middlemen = new List<Middleman>();
-        public static List<Product> products = Utils.parseYamlFile($"{projectDirectory}\\produkte.yml");
-
-        static GameState state = GameState.NewTurn;
-        static int currentPlayerIndex = 0;
-        static int day = 1;
-
-        public GameController()
-        {
-
-        }
-
         public static void init()
         {
             int numberOfMiddleman = UiController.getIntFromReadLinePrompt("Wie viele Zwischenhändler nehmen teil? ");
 
-            // Save all middlemen
+            // Save all Middlemen
             //-------------------
             for (int i = 1; i <= numberOfMiddleman; i++)
             {
@@ -47,56 +23,15 @@ namespace Middleman_1
                 string companyName = UiController.getStringFromReadLinePrompt($"Name der Firma von {middlemanName}: ");
                 int difficulty = UiController.getIntFromReadLinePrompt("Schwierigkeitsgrad auswählen (1) Einfach, (2) Normal, (3) Schwer: ");
 
-                middlemen.Add(new Middleman(middlemanName, companyName, difficulty));
+                GameInfo.MiddlemanList.Add(new Middleman(middlemanName, companyName, difficulty));
             }
 
-            dailyRandomProductionRate();
+            GameInfo.CurrentMiddleman = GameInfo.MiddlemanList[0];
+
+            handleDailyProductionRateAdjustment();
         }
 
-        public static void startStateMachine()
-        {
-            while (true)
-            {
-                try
-                {
-                    string input = "";
-                    Middleman currentMiddleman = middlemen[currentPlayerIndex];
-
-                    switch (state)
-                    {
-                        case GameState.NewTurn:
-                            UiController.displayNewTurn(currentMiddleman, day);
-                            state = GameState.SelectNextMove;
-                            break;
-                        case GameState.SelectNextMove:
-                            state = getNextStateFromInput(Console.ReadLine());
-                            break;
-                        case GameState.Buying:
-                            state = executeBuyingState(currentMiddleman);
-                            break;
-                        case GameState.Selling:
-                            state = executeSellingState(currentMiddleman);
-                            break;
-                        case GameState.StockAdjustment:
-                            state = executeStockAdjustmentState(currentMiddleman);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (GameException ex)
-                {
-                    Console.WriteLine($"Spielfehler: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Anwendungsfehler: {ex.Message}");
-                }
-            }
-        }
-
-
-        static void buyStockUpgrade(Middleman middleman, int quantity)
+        public static void buyStockUpgrade(Middleman middleman, int quantity)
         {
             int upgradeCost = 50;
 
@@ -115,10 +50,12 @@ namespace Middleman_1
             }
         }
 
-        static void buyProduct(Middleman middleman, Product product, int quantity)
+        public static void buyProduct(Middleman middleman, Product product, int quantity)
         {
             float cost = product.BuyingPrice * quantity;
-            if (isValidPurchase(middleman, product, cost, quantity))
+
+            string errorMessage;
+            if (isValidPurchase(middleman, product, cost, quantity, out errorMessage))
             {
                 middleman.Balance -= cost;
                 middleman.StockCount += quantity;
@@ -137,11 +74,11 @@ namespace Middleman_1
             }
             else
             {
-                throw new GameException("Kein valider Einkauf. Kauf wurde abgebrochen");
+                throw new GameException(errorMessage);
             }
         }
 
-        static void sellProduct(Middleman middleman, Product product, int quantity)
+        public static void sellProduct(Middleman middleman, Product product, int quantity)
         {
             float sellPrice = product.BasePrice * 0.8f * quantity;
 
@@ -157,18 +94,17 @@ namespace Middleman_1
             }
         }
 
-
-        static Product getProductFromList(int index)
+        public static Product getProductFromList(int index)
         {
-            if (index <= products.Count)
+            if (index <= GameInfo.ProductList.Count)
             {
-                return products[index - 1];
+                return GameInfo.ProductList[index - 1];
             }
 
             throw new GameException("Falsche Indexangabe für das Produkt. Bitte Index aus angezeigter Produktliste wählen.");
         }
 
-        static Product getProductFromStock(Middleman middleman, int index)
+        public static Product getProductFromStock(Middleman middleman, int index)
         {
             if (index <= middleman.Stock.Count())
             {
@@ -178,11 +114,11 @@ namespace Middleman_1
             throw new GameException("Falsche Indexangabe für das Produkt. Index muss <= Anzahl unterschiedlicher Produkte im Lager sein.");
         }
 
-        static void dailyRandomProductionRate()
+        public static void handleDailyProductionRateAdjustment()
         {
             Random random = new Random();
 
-            foreach (Product product in products)
+            foreach (Product product in GameInfo.ProductList)
             {
                 int randomValue = random.Next(product.MinProductionRate, product.MaxProductionRate);
                 product.AvailableAmount += randomValue;
@@ -194,24 +130,25 @@ namespace Middleman_1
             }
         }
 
-        static void dailyRandomPriceAdjustment()
+        public static void handleDailyPriceAdjustment()
         {
             Random random = new Random();
 
-            foreach (Product product in products)
+            foreach (Product product in GameInfo.ProductList)
             {
                 adjustProductPriceByRandomPercentage(product);
             }
         }
 
-        static void adjustProductPrice(Product product, float priceBasis, int percentage)
+        public static void adjustProductPrice(Product product, float priceBasis, int percentage)
         {
             if (percentage > 0)
                 increaseProductPrice(product, priceBasis, percentage);
             else
                 decreaseProductPrice(product, priceBasis, percentage);
         }
-        static void increaseProductPrice(Product product, float priceBasis, int percentage)
+
+        public static void increaseProductPrice(Product product, float priceBasis, int percentage)
         {
             float newPrice = priceBasis * (1 + (percentage / 100.0f));
 
@@ -226,7 +163,7 @@ namespace Middleman_1
             product.BuyingPrice = newPrice;
         }
 
-        static void decreaseProductPrice(Product product, float priceBasis, int percentage)
+        public static void decreaseProductPrice(Product product, float priceBasis, int percentage)
         {
             float newPrice = priceBasis * (1 + (percentage / 100.0f));
 
@@ -241,7 +178,7 @@ namespace Middleman_1
             product.BuyingPrice = newPrice;
         }
 
-        static void adjustProductPriceByRandomPercentage(Product product)
+        public static void adjustProductPriceByRandomPercentage(Product product)
         {
             Random random = new Random();
             int maxAvailableAmount = product.MaxProductionRate * product.Durability;
@@ -265,43 +202,56 @@ namespace Middleman_1
             }
         }
 
-        static bool hasEnoughBalance(Middleman middleman, float cost)
+        public static bool hasEnoughBalance(Middleman middleman, float cost)
         {
             if (cost < middleman.Balance)
                 return true;
 
-            throw new GameException("Kontostand ist für diese Transaktion zu niedrig.");
+            return false;
         }
 
-        static bool hasEnoughStockSpace(Middleman middleman, int quantity)
+        public static bool hasEnoughStockSpace(Middleman middleman, int quantity)
         {
             if (middleman.StockCount + quantity <= middleman.StockCapacity)
                 return true;
 
-            throw new GameException("Es gibt nicht genügend Platz auf Lager. Niedrige Anzahl auswählen.");
+            return false;
         }
 
-        static bool hasEnoughAmountToBuy(Product product, int quantity)
+        public static bool hasEnoughAmountToBuy(Product product, int quantity)
         {
             if (quantity <= product.AvailableAmount)
                 return true;
 
-            throw new GameException("Es gibt nicht genügend Einheiten zum Kaufen. Niedrige Anzahl auswählen.");
-        }
-
-        static bool isValidPurchase(Middleman middleman, Product product, float cost, int quantity)
-        {
-            if (hasEnoughBalance(middleman, cost) &&
-                hasEnoughStockSpace(middleman, quantity) &&
-                hasEnoughAmountToBuy(product, quantity))
-            {
-                return true;
-            }
-
             return false;
         }
 
-        static bool isValidSelling(int stockCount, int quantity)
+        public static bool isValidPurchase(Middleman middleman, Product product, float cost, int quantity, out string errorMessage)
+        {
+            errorMessage = null;
+
+            if (!hasEnoughBalance(middleman, cost))
+            {
+                errorMessage = "Der Kontostand für die Transaktion ist zu niedrig.";
+                return false;
+            }
+
+            if (!hasEnoughStockSpace(middleman, quantity))
+            {
+                errorMessage = "Es gibt nicht genügend Platz auf Lager. Niedrigere Anzahl auswählen.";
+                return false;
+            }
+
+            if (!hasEnoughAmountToBuy(product, quantity))
+            {
+                errorMessage = "Es gibt nicht genügend Einheiten zum Kaufen. Niedrige Anzahl auswählen.";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool isValidSelling(int stockCount, int quantity)
         {
             if (quantity <= stockCount)
                 return true;
@@ -309,116 +259,40 @@ namespace Middleman_1
             return false;
         }
 
-        static GameState getNextStateFromInput(string input)
+        public static void payDailyStorageCost(Middleman middleman)
         {
-            switch (input)
+            float cost = middleman.getStockCount() * 5 + middleman.StockCapacity;
+
+            if (hasEnoughBalance(middleman, cost))
             {
-                case "b":
-                    currentPlayerIndex++;
-                    state = GameState.NewTurn;
-
-                    // Day is over, start new day
-                    //---------------------------
-                    if (currentPlayerIndex == middlemen.Count())
-                    {
-                        day++;
-                        currentPlayerIndex = 0;
-
-                        Utils.leftShiftListOrder(middlemen);
-                        dailyRandomProductionRate();
-                        dailyRandomPriceAdjustment();
-                    }
-                    break;
-                case "e":
-                    state = GameState.Buying;
-                    break;
-                case "l":
-                    state = GameState.StockAdjustment;
-                    break;
-                case "v":
-                    state = GameState.Selling;
-                    break;
-                default:
-                    state = GameState.SelectNextMove;
-                    break;
+                middleman.Balance -= cost;
             }
-
-            return state;
+            else
+            {
+                removeMiddlemanFromList(middleman);
+                UiController.displayLosingMiddleman(middleman);
+            }
         }
 
-        static GameState executeBuyingState(Middleman currentMiddleman)
+        public static void removeMiddlemanFromList(Middleman middleman)
         {
-            UiController.displayBuyingOption(products);
-
-            string input = Console.ReadLine();
-
-            switch (input)
-            {
-                case "z":
-                    state = GameState.NewTurn;
-                    break;
-                default:
-                    int inputIndex = Utils.convertStringToInt(input);
-                    Product product = getProductFromList(inputIndex);
-                    UiController.displayProductToBuy(product);
-
-                    int quantity = Utils.convertStringToInt(Console.ReadLine());
-                    buyProduct(currentMiddleman, product, quantity);
-
-                    state = GameState.NewTurn;
-                    break;
-            }
-
-            return state;
+            GameInfo.MiddlemanList.Remove(middleman);
         }
 
-        static GameState executeSellingState(Middleman currentMiddleman)
+        public static Boolean isNextDay()
         {
-            UiController.displaySellingOption(currentMiddleman);
-
-            string input = Console.ReadLine();
-
-            switch (input)
+            if (GameInfo.CurrentPlayerIndex == GameInfo.MiddlemanList.Count())
             {
-                case "z":
-                    state = GameState.NewTurn;
-                    break;
-                default:
-                    int inputIndex = Utils.convertStringToInt(input);
-                    Product product = getProductFromStock(currentMiddleman, inputIndex);
-                    UiController.displayProductToSell(currentMiddleman, product);
-
-                    int quantity = Utils.convertStringToInt(Console.ReadLine());
-                    sellProduct(currentMiddleman, product, quantity);
-
-                    state = GameState.NewTurn;
-                    break;
+                return true;
             }
 
-            return state;
+            return false;
         }
 
-        static GameState executeStockAdjustmentState(Middleman currentMiddleman)
+        public static void updateGameInfoForNextDay()
         {
-            UiController.displayStockOptions();
-
-            string input = Console.ReadLine();
-
-            switch (input)
-            {
-                case "z":
-                    state = GameState.NewTurn;
-                    break;
-                default:
-                    int inputQuantity = Utils.convertStringToInt(input);
-
-                    GameController.buyStockUpgrade(currentMiddleman, inputQuantity);
-
-                    state = GameState.NewTurn;
-                    break;
-            }
-
-            return state;
+            GameInfo.Day++;
+            GameInfo.CurrentPlayerIndex = 0;
         }
     }
 }
