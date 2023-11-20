@@ -16,12 +16,41 @@ namespace Middleman_1
         private int stockCount;
         private int stockCapacity;
 
-        public string Name { get => name; set => name = value; }
-        public string CompanyName { get => companyName; set => companyName = value; }
-        public float Balance { get => balance; set => balance = value; }
-        public Dictionary<Product, int> Stock { get => stock; set => stock = value; }
-        public int StockCount { get => stockCount; set => stockCount = value; }
-        public int StockCapacity { get => stockCapacity; set => stockCapacity = value; }
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        public string CompanyName
+        {
+            get => companyName;
+            set => companyName = value;
+        }
+
+        public float Balance
+        {
+            get => balance;
+            set => balance = value;
+        }
+
+        public Dictionary<Product, int> Stock
+        {
+            get => stock;
+            set => stock = value;
+        }
+
+        public int StockCount
+        {
+            get => stockCount;
+            set => stockCount = value;
+        }
+
+        public int StockCapacity
+        {
+            get => stockCapacity;
+            set => stockCapacity = value;
+        }
 
 
         public Middleman(string name, string companyName, int difficulty)
@@ -52,7 +81,7 @@ namespace Middleman_1
         public int getStockCount()
         {
             int count = 0;
-            foreach(KeyValuePair<Product, int> entry in stock)
+            foreach (KeyValuePair<Product, int> entry in stock)
             {
                 count += entry.Value;
             }

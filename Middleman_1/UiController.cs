@@ -3,16 +3,15 @@ using System;
 
 public class UiController
 {
-	public UiController()
-	{
-		
-	}
+    public UiController()
+    {
+    }
 
     public static int getIntFromReadLinePrompt(string text)
     {
         Console.Write(text);
         int value;
-        while(true)
+        while (true)
         {
             try
             {
@@ -44,7 +43,8 @@ public class UiController
 
     public static void displayMenu(Middleman middleman, int day)
     {
-        Console.WriteLine($"{middleman.Name} von {middleman.CompanyName} | ${middleman.Balance:F2} | Lager: {middleman.StockCount}/{middleman.StockCapacity} | Tag {day}");
+        Console.WriteLine(
+            $"{middleman.Name} von {middleman.CompanyName} | ${middleman.Balance:F2} | Lager: {middleman.StockCount}/{middleman.StockCapacity} | Tag {day}");
         Console.WriteLine("e) Einkaufen");
         Console.WriteLine("v) Verkaufen");
         Console.WriteLine("l) Lagerkapazität erhöhen");
@@ -78,7 +78,8 @@ public class UiController
             Product product = middleman.Stock.ElementAt(i).Key;
             float sellingPrice = product.BuyingPrice * 0.8f;
 
-            Console.WriteLine($"{i+1}) {product.Name} ({middleman.Stock.ElementAt(i).Value}) ${sellingPrice:F2}/Stück");
+            Console.WriteLine(
+                $"{i + 1}) {product.Name} ({middleman.Stock.ElementAt(i).Value}) ${sellingPrice:F2}/Stück");
         }
     }
 

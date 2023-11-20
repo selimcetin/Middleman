@@ -21,7 +21,9 @@ namespace Middleman_1
             {
                 string middlemanName = UiController.getStringFromReadLinePrompt($"Name von Zwischenhänder {i}: ");
                 string companyName = UiController.getStringFromReadLinePrompt($"Name der Firma von {middlemanName}: ");
-                int difficulty = UiController.getIntFromReadLinePrompt("Schwierigkeitsgrad auswählen (1) Einfach, (2) Normal, (3) Schwer: ");
+                int difficulty =
+                    UiController.getIntFromReadLinePrompt(
+                        "Schwierigkeitsgrad auswählen (1) Einfach, (2) Normal, (3) Schwer: ");
 
                 gameInfo.MiddlemanList.Add(new Middleman(middlemanName, companyName, difficulty));
             }
@@ -101,7 +103,8 @@ namespace Middleman_1
                 return productList[index - 1];
             }
 
-            throw new GameException("Falsche Indexangabe für das Produkt. Bitte Index aus angezeigter Produktliste wählen.");
+            throw new GameException(
+                "Falsche Indexangabe für das Produkt. Bitte Index aus angezeigter Produktliste wählen.");
         }
 
         public static Product getProductFromStock(Middleman middleman, int index)
@@ -111,7 +114,8 @@ namespace Middleman_1
                 return middleman.Stock.ElementAt(index - 1).Key;
             }
 
-            throw new GameException("Falsche Indexangabe für das Produkt. Index muss <= Anzahl unterschiedlicher Produkte im Lager sein.");
+            throw new GameException(
+                "Falsche Indexangabe für das Produkt. Index muss <= Anzahl unterschiedlicher Produkte im Lager sein.");
         }
 
         public static void handleDailyProductionRateAdjustment(List<Product> productList)
@@ -172,7 +176,7 @@ namespace Middleman_1
             //-----------------------------------------------------
             if (newPrice < 0.25 * product.BasePrice)
             {
-                product.BuyingPrice = (int) Math.Round(0.25 * product.BasePrice, MidpointRounding.AwayFromZero);
+                product.BuyingPrice = (int)Math.Round(0.25 * product.BasePrice, MidpointRounding.AwayFromZero);
             }
 
             product.BuyingPrice = newPrice;
@@ -226,7 +230,8 @@ namespace Middleman_1
             return false;
         }
 
-        public static bool isValidPurchase(Middleman middleman, Product product, float cost, int quantity, out string errorMessage)
+        public static bool isValidPurchase(Middleman middleman, Product product, float cost, int quantity,
+            out string errorMessage)
         {
             errorMessage = null;
 
@@ -261,7 +266,10 @@ namespace Middleman_1
 
         public static void payDailyStorageCost(Middleman middleman, List<Middleman> middlemanList)
         {
-            float cost = middleman.getStockCount() * 5 + middleman.StockCapacity;
+            // Cost for storage is 1$ per free space and 5$ per allocated space
+            // Example storage situation: 10/110 --> cost = 10*50 + 100;
+            //----------------------------------------------------------
+            float cost = middleman.getStockCount() * 5 + (middleman.StockCapacity - middleman.getStockCount());
 
             if (hasEnoughBalance(middleman, cost))
             {
@@ -279,7 +287,7 @@ namespace Middleman_1
             middlemanList.Remove(middleman);
         }
 
-        public static Boolean isNextDay(List<Middleman> middlemanList, int currentPlayerIndex)
+        public static bool isNextDay(List<Middleman> middlemanList, int currentPlayerIndex)
         {
             if (currentPlayerIndex == middlemanList.Count())
             {

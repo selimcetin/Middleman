@@ -1,5 +1,4 @@
-﻿
-namespace Middleman_1
+﻿namespace Middleman_1
 {
     public enum GameState
     {

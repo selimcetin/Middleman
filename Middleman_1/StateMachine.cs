@@ -120,9 +120,10 @@ namespace Middleman_1
                     }
                     else
                     {
-                        gameInfo.SelectedProduct = GameController.getProductFromStock(gameInfo.CurrentMiddleman, inputValue);
+                        gameInfo.SelectedProduct =
+                            GameController.getProductFromStock(gameInfo.CurrentMiddleman, inputValue);
                         return GameState.Selling_Amount;
-                    }  
+                    }
             }
         }
 
@@ -135,10 +136,8 @@ namespace Middleman_1
                 gameInfo.SelectedAmount = inputValue;
                 return GameState.Transaction;
             }
-            else
-            {
-                return GameState.TurnEnd;
-            }
+
+            return GameState.TurnEnd;
         }
 
         static void handleTransaction(GameInfo gameInfo)
@@ -146,10 +145,12 @@ namespace Middleman_1
             switch (gameInfo.TransactionType)
             {
                 case TransactionType.Buying:
-                    GameController.buyProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct, gameInfo.SelectedAmount);
+                    GameController.buyProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
+                        gameInfo.SelectedAmount);
                     break;
                 case TransactionType.Selling:
-                    GameController.sellProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct, gameInfo.SelectedAmount);
+                    GameController.sellProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
+                        gameInfo.SelectedAmount);
                     break;
                 case TransactionType.StorageUpgrade:
                     GameController.buyStockUpgrade(gameInfo.CurrentMiddleman, gameInfo.SelectedAmount);
@@ -181,4 +182,3 @@ namespace Middleman_1
         }
     }
 }
-

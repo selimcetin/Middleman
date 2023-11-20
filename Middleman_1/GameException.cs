@@ -11,10 +11,12 @@ namespace Middleman_1
     {
         public GameException(string message)
             : base(message)
-        { }
+        {
+        }
 
         protected GameException(SerializationInfo info, StreamingContext ctxt)
             : base(info, ctxt)
-        { }
+        {
+        }
     }
 }

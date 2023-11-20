@@ -14,6 +14,7 @@ namespace Middleman_1
 
         private int currentPlayerIndex;
         private int day;
+        private int lastDay;
         private GameState gameState;
         private TransactionType transactionType;
         private Middleman currentMiddleman;
@@ -23,18 +24,67 @@ namespace Middleman_1
         private List<Product> productList;
         private Product selectedProduct;
         private int selectedAmount;
-        
 
-        public int CurrentPlayerIndex { get => currentPlayerIndex; set => currentPlayerIndex = value; }
-        public int Day { get => day; set => day = value; }
-        public GameState GameState { get => gameState; set => gameState = value; }
-        public Middleman CurrentMiddleman { get => currentMiddleman; set => currentMiddleman = value; }
-        public string ProjectDirectory { get => projectDirectory; set => projectDirectory = value; }
-        public List<Middleman> MiddlemanList { get => middlemanList; set => middlemanList = value; }
-        public List<Product> ProductList { get => productList; set => productList = value; }
-        public Product SelectedProduct { get => selectedProduct; set => selectedProduct = value; }
-        public int SelectedAmount { get => selectedAmount; set => selectedAmount = value; }
-        public TransactionType TransactionType { get => transactionType; set => transactionType = value; }
+
+        public int CurrentPlayerIndex
+        {
+            get => currentPlayerIndex;
+            set => currentPlayerIndex = value;
+        }
+
+        public int Day
+        {
+            get => day;
+            set => day = value;
+        }
+
+        public GameState GameState
+        {
+            get => gameState;
+            set => gameState = value;
+        }
+
+        public Middleman CurrentMiddleman
+        {
+            get => currentMiddleman;
+            set => currentMiddleman = value;
+        }
+
+        public List<Middleman> MiddlemanList
+        {
+            get => middlemanList;
+            set => middlemanList = value;
+        }
+
+        public List<Product> ProductList
+        {
+            get => productList;
+            set => productList = value;
+        }
+
+        public Product SelectedProduct
+        {
+            get => selectedProduct;
+            set => selectedProduct = value;
+        }
+
+        public int SelectedAmount
+        {
+            get => selectedAmount;
+            set => selectedAmount = value;
+        }
+
+        public TransactionType TransactionType
+        {
+            get => transactionType;
+            set => transactionType = value;
+        }
+
+        public int LastDay
+        {
+            get => lastDay;
+            set => lastDay = value;
+        }
 
         private GameInfo()
         {
@@ -57,6 +107,7 @@ namespace Middleman_1
                 {
                     instance = new GameInfo();
                 }
+
                 return instance;
             }
         }

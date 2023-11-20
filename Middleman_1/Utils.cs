@@ -39,7 +39,7 @@ namespace Middleman_1
 
                 Product product = getProductFromYamlItem(yamlItem);
 
-                if (product != null )
+                if (product != null)
                     products.Add(product);
             }
 
@@ -53,8 +53,8 @@ namespace Middleman_1
             // Split yaml file by all possible new line expressions
             //-----------------------------------------------------
             string[] yamlLines = yamlItem.Split(
-                            new string[] { "\r\n", "\r", "\n" },
-                            StringSplitOptions.None);
+                new string[] { "\r\n", "\r", "\n" },
+                StringSplitOptions.None);
 
             foreach (string yamlLine in yamlLines)
             {
@@ -83,7 +83,7 @@ namespace Middleman_1
 
             foreach (PropertyInfo property in properties)
             {
-                if(propertyName.ToLower() == property.Name.ToLower())
+                if (propertyName.ToLower() == property.Name.ToLower())
                 {
                     if (isNumeric(value))
                         property.SetValue(product, convertStringToInt(value));
@@ -95,7 +95,7 @@ namespace Middleman_1
 
         public static int convertStringToInt(string str)
         {
-            if(isNumeric(str))
+            if (isNumeric(str))
             {
                 return int.Parse(str);
             }
