@@ -65,6 +65,7 @@ namespace Middleman_1
             // Game over
             //----------
             UiController.displayScoreboard(gameInfo.MiddlemanList);
+            Console.ReadKey();
         }
 
         static GameState getNextStateFromInput(GameInfo gameInfo)
