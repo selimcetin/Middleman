@@ -10,7 +10,7 @@ public class Program
     {
         GameInfo gameInfo = GameInfo.Instance; // Get Singleton
 
-        GameController.init(gameInfo);
+        GameController.initializeGameParameters(gameInfo);
 
         StateMachine.startStateMachine(gameInfo);
     }

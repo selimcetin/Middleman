@@ -1,5 +1,6 @@
 ﻿using Middleman_1;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 public class UiController
 {
@@ -110,5 +111,15 @@ public class UiController
     public static void displayLosingMiddleman(Middleman middleman)
     {
         Console.WriteLine($"{middleman.ToString()} has lost the game.");
+    }
+
+    public static void displayScoreboard(List<Middleman> middlemanList)
+    {
+        middlemanList.Sort((middleman1, middleman2) => middleman2.Balance.CompareTo(middleman1.Balance));
+
+        for (int i = 0; i < middlemanList.Count; i++)
+        {
+            Console.WriteLine($"Platz {i + 1}: {middlemanList[i].ToString()}");
+        }
     }
 }

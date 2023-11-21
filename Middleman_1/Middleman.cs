@@ -91,7 +91,7 @@ namespace Middleman_1
 
         public override string? ToString()
         {
-            return $"{name} of company {companyName}";
+            return $"{name} der Firma {companyName}";
         }
     }
 }

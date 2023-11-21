@@ -10,7 +10,7 @@ namespace Middleman_1
     {
         public static void startStateMachine(GameInfo gameInfo)
         {
-            while (true)
+            while (!GameController.isGameOver(gameInfo))
             {
                 try
                 {
@@ -61,6 +61,10 @@ namespace Middleman_1
                     Console.WriteLine($"Anwendungsfehler: {ex.Message}");
                 }
             }
+
+            // Game over
+            //----------
+            UiController.displayScoreboard(gameInfo.MiddlemanList);
         }
 
         static GameState getNextStateFromInput(GameInfo gameInfo)
@@ -162,7 +166,6 @@ namespace Middleman_1
         {
             gameInfo.CurrentPlayerIndex++;
             gameInfo.GameState = GameState.TurnStart;
-            GameController.payDailyStorageCost(gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
 
             // Day is over, start new Day
             //---------------------------
@@ -170,11 +173,14 @@ namespace Middleman_1
             {
                 executeChangesForNextDay(gameInfo);
             }
+
+            GameController.payDailyStorageCost(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
         }
 
         static void executeChangesForNextDay(GameInfo gameInfo)
         {
-            GameController.updateGameInfoForNextDay(gameInfo);
+            gameInfo.Day++;
+            gameInfo.CurrentPlayerIndex = 0;
 
             Utils.leftShiftListOrder(gameInfo.MiddlemanList);
             GameController.handleDailyProductionRateAdjustment(gameInfo.ProductList);

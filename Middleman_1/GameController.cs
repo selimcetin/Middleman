@@ -11,9 +11,11 @@ namespace Middleman_1
 {
     public static class GameController
     {
-        public static void init(GameInfo gameInfo)
+        public static void initializeGameParameters(GameInfo gameInfo)
         {
             int numberOfMiddleman = UiController.getIntFromReadLinePrompt("Wie viele Zwischenhändler nehmen teil? ");
+            gameInfo.LastDay =
+                UiController.getIntFromReadLinePrompt("Wie viele Runden bzw. Tage sollen gespielt werden? ");
 
             // Save all Middlemen
             //-------------------
@@ -264,7 +266,7 @@ namespace Middleman_1
             return false;
         }
 
-        public static void payDailyStorageCost(Middleman middleman, List<Middleman> middlemanList)
+        public static void payDailyStorageCost(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
         {
             // Cost for storage is 1$ per free space and 5$ per allocated space
             // Example storage situation: 10/110 --> cost = 10*50 + 100;
@@ -277,13 +279,14 @@ namespace Middleman_1
             }
             else
             {
-                removeMiddlemanFromList(middleman, middlemanList);
+                removeMiddlemanFromList(gameInfo, middleman, middlemanList);
                 UiController.displayLosingMiddleman(middleman);
             }
         }
 
-        public static void removeMiddlemanFromList(Middleman middleman, List<Middleman> middlemanList)
+        static void removeMiddlemanFromList(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
         {
+            gameInfo.CurrentPlayerIndex--;
             middlemanList.Remove(middleman);
         }
 
@@ -297,10 +300,12 @@ namespace Middleman_1
             return false;
         }
 
-        public static void updateGameInfoForNextDay(GameInfo gameInfo)
+        public static bool isGameOver(GameInfo gameInfo)
         {
-            gameInfo.Day++;
-            gameInfo.CurrentPlayerIndex = 0;
+            if (gameInfo.Day > gameInfo.LastDay) return true;
+            if (gameInfo.MiddlemanList.Count == 0) return true;
+
+            return false;
         }
     }
 }
