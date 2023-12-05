@@ -150,15 +150,15 @@ namespace Middleman_1
             switch (gameInfo.TransactionType)
             {
                 case TransactionType.Buying:
-                    GameController.buyProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
+                    MiddlemanController.buyProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
                         gameInfo.SelectedAmount);
                     break;
                 case TransactionType.Selling:
-                    GameController.sellProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
+                    MiddlemanController.sellProduct(gameInfo.CurrentMiddleman, gameInfo.SelectedProduct,
                         gameInfo.SelectedAmount);
                     break;
                 case TransactionType.StorageUpgrade:
-                    GameController.buyStockUpgrade(gameInfo.CurrentMiddleman, gameInfo.SelectedAmount);
+                    MiddlemanController.buyStockUpgrade(gameInfo.CurrentMiddleman, gameInfo.SelectedAmount);
                     break;
             }
         }
@@ -175,7 +175,7 @@ namespace Middleman_1
                 executeChangesForNextDay(gameInfo);
             }
 
-            GameController.payDailyStorageCost(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
+            MiddlemanController.payDailyStorageCost(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
         }
 
         static void executeChangesForNextDay(GameInfo gameInfo)
@@ -184,8 +184,8 @@ namespace Middleman_1
             gameInfo.CurrentPlayerIndex = 0;
 
             Utils.leftShiftListOrder(gameInfo.MiddlemanList);
-            GameController.handleDailyProductionRateAdjustment(gameInfo.ProductList);
-            GameController.handleDailyPriceAdjustment(gameInfo.ProductList);
+            MarketController.handleDailyProductionRateAdjustment(gameInfo.ProductList);
+            MarketController.handleDailyPriceAdjustment(gameInfo.ProductList);
         }
     }
 }
