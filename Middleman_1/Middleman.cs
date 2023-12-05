@@ -15,6 +15,10 @@ namespace Middleman_1
         private Dictionary<Product, int> stock;
         private int stockCount;
         private int stockCapacity;
+        private float balancePreviousDay;
+        private float buyingCostPreviousDay;
+        private float salesPreviousDay;
+        private float storageCostPreviousDay;
 
         public string Name
         {
@@ -39,7 +43,7 @@ namespace Middleman_1
             get => stock;
             set => stock = value;
         }
-
+         
         public int StockCount
         {
             get => stockCount;
@@ -50,6 +54,30 @@ namespace Middleman_1
         {
             get => stockCapacity;
             set => stockCapacity = value;
+        }
+
+        public float BalancePreviousDay
+        {
+            get => balancePreviousDay;
+            set => balancePreviousDay = value;
+        }
+
+        public float BuyingCostPreviousDay
+        {
+            get => buyingCostPreviousDay;
+            set => buyingCostPreviousDay = value;
+        }
+
+        public float SalesPreviousDay
+        {
+            get => salesPreviousDay;
+            set => salesPreviousDay = value;
+        }
+
+        public float StorageCostPreviousDay
+        {
+            get => storageCostPreviousDay;
+            set => storageCostPreviousDay = value;
         }
 
 
