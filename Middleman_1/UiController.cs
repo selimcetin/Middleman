@@ -42,6 +42,21 @@ public class UiController
         return Console.ReadLine();
     }
 
+    static void printSeparator()
+    {
+        Console.WriteLine("-----------------------------------------------");
+    }
+
+    public static void displayReport(Middleman middleman)
+    {
+        Console.WriteLine($"Kontostand des letzten Tages: {middleman.BalancePreviousDay}");
+        Console.WriteLine($"Ausgaben für Einkaufe des letzten Tages: {middleman.BuyingCostPreviousDay}");
+        Console.WriteLine($"Einnahmen für Verkäufe des letzten Tages: {middleman.SalesPreviousDay}");
+        Console.WriteLine($"Lagerkosten des letzten Tages: {middleman.StorageCostPreviousDay}");
+        Console.WriteLine($"Aktueller Kontostand: {middleman.Balance}");
+        printSeparator();
+    }
+
     public static void displayMenu(Middleman middleman, int day)
     {
         Console.WriteLine(
@@ -50,6 +65,7 @@ public class UiController
         Console.WriteLine("v) Verkaufen");
         Console.WriteLine("l) Lagerkapazität erhöhen");
         Console.WriteLine("b) Runde beenden");
+        printSeparator();
     }
 
     public static void displayBuyingOption(List<Product> products)
@@ -57,6 +73,7 @@ public class UiController
         Console.WriteLine($"Verfügbare Produkte:");
         displayProducts(products);
         Console.WriteLine("z) Zurück");
+        printSeparator();
     }
 
     public static void displaySellingOption(Middleman middleman)
@@ -64,12 +81,14 @@ public class UiController
         Console.WriteLine("Produkte im Besitz:");
         displayStock(middleman);
         Console.WriteLine("z) Zurück");
+        printSeparator();
     }
 
     public static void displayStockOptions()
     {
         Console.WriteLine("Erhöhung der Lagerkapazität kostet 50$ pro Einheit.");
         Console.WriteLine("Um wie viel Einheiten soll Lager vergrößert werden? 1 Einheit = 50 Lager Kapazität.");
+        printSeparator();
     }
 
     static void displayStock(Middleman middleman)
@@ -82,6 +101,7 @@ public class UiController
             Console.WriteLine(
                 $"{i + 1}) {product.Name} ({middleman.Stock.ElementAt(i).Value}) ${sellingPrice:F2}/Stück");
         }
+        printSeparator();
     }
 
     static void displayProducts(List<Product> products)
@@ -90,6 +110,7 @@ public class UiController
         {
             Console.WriteLine($"{i}) {products[i - 1].ToString()}");
         }
+        printSeparator();
     }
 
     public static void displayProductToBuy(Product product)
@@ -98,6 +119,7 @@ public class UiController
         {
             Console.WriteLine($"Wie viel von {product.Name} kaufen?");
         }
+        printSeparator();
     }
 
     public static void displayProductToSell(Middleman middleman, Product product)
@@ -106,11 +128,13 @@ public class UiController
         {
             Console.WriteLine($"Wieviel von {product.Name} verkaufen (max. {middleman.Stock[product]})? ");
         }
+        printSeparator();
     }
 
     public static void displayLosingMiddleman(Middleman middleman)
     {
         Console.WriteLine($"{middleman.ToString()} has lost the game.");
+        printSeparator();
     }
 
     public static void displayScoreboard(List<Middleman> middlemanList)
@@ -121,5 +145,6 @@ public class UiController
         {
             Console.WriteLine($"Platz {i + 1}: {middlemanList[i].ToString()}");
         }
+        printSeparator();
     }
 }
