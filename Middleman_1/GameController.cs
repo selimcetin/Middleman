@@ -13,15 +13,19 @@ namespace Middleman_1
     {
         public static void initializeGameParameters(GameInfo gameInfo)
         {
-            int numberOfMiddleman = UiController.getIntFromReadLinePrompt("Wie viele Zwischenhändler nehmen teil? ");
-            gameInfo.LastDay =
-                UiController.getIntFromReadLinePrompt("Wie viele Runden bzw. Tage sollen gespielt werden? ");
+            setNumberOfPlayers(gameInfo);
+            setNumberOfTurnsToPlay(gameInfo);
 
-            // Save all Middlemen
-            //-------------------
-            for (int i = 1; i <= numberOfMiddleman; i++)
+            initializePlayerList(gameInfo);
+
+            handleDailyProductionRateAdjustment(gameInfo.ProductList);
+        }
+
+        static void initializePlayerList(GameInfo gameInfo)
+        {
+            for (int i = 0; i < gameInfo.NumberOfPlayers; i++)
             {
-                string middlemanName = UiController.getStringFromReadLinePrompt($"Name von Zwischenhänder {i}: ");
+                string middlemanName = UiController.getStringFromReadLinePrompt($"Name von Zwischenhänder {i + 1}: ");
                 string companyName = UiController.getStringFromReadLinePrompt($"Name der Firma von {middlemanName}: ");
                 int difficulty =
                     UiController.getIntFromReadLinePrompt(
@@ -31,8 +35,17 @@ namespace Middleman_1
             }
 
             gameInfo.CurrentMiddleman = gameInfo.MiddlemanList[0];
+        }
 
-            handleDailyProductionRateAdjustment(gameInfo.ProductList);
+        static void setNumberOfPlayers(GameInfo gameInfo)
+        {
+            gameInfo.NumberOfPlayers = UiController.getIntFromReadLinePrompt("Wie viele Zwischenhändler nehmen teil? ");
+        }
+
+        static void setNumberOfTurnsToPlay(GameInfo gameInfo)
+        {
+            gameInfo.LastDay =
+                UiController.getIntFromReadLinePrompt("Wie viele Runden bzw. Tage sollen gespielt werden? ");
         }
 
         public static void buyStockUpgrade(Middleman middleman, int quantity)

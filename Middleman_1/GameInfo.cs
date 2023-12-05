@@ -24,6 +24,8 @@ namespace Middleman_1
         private List<Product> productList;
         private Product selectedProduct;
         private int selectedAmount;
+        private int numberOfPlayers;
+        
 
 
         public int CurrentPlayerIndex
@@ -84,6 +86,12 @@ namespace Middleman_1
         {
             get => lastDay;
             set => lastDay = value;
+        }
+
+        public int NumberOfPlayers
+        {
+            get => numberOfPlayers;
+            set => numberOfPlayers = value;
         }
 
         private GameInfo()
