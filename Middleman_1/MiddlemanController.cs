@@ -153,7 +153,7 @@ namespace Middleman_1
 
         public static void resetPreviousDayVariables(Middleman middleman)
         {
-            middleman.BalancePreviousDay = 0;
+            middleman.BuyingCostPreviousDay = 0;
             middleman.SalesPreviousDay = 0;
             middleman.StorageCostPreviousDay = 0;
             middleman.BalancePreviousDay = middleman.Balance;

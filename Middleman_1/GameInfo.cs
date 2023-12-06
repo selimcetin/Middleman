@@ -98,7 +98,7 @@ namespace Middleman_1
         {
             currentPlayerIndex = 0;
             day = 1;
-            gameState = GameState.Menu;
+            gameState = GameState.TurnStart;
             selectedProduct = null;
             selectedAmount = -1;
 

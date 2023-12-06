@@ -8,7 +8,7 @@ namespace Middleman_1
 {
     public static class MarketController
     {
-        public static void handleDailyProductionRateAdjustment(List<Product> productList)
+        public static void adjustDailyProductionRate(List<Product> productList)
         {
             Random random = new Random();
 
@@ -24,7 +24,7 @@ namespace Middleman_1
             }
         }
 
-        public static void handleDailyPriceAdjustment(List<Product> productList)
+        public static void adjustDailyProductPrice(List<Product> productList)
         {
             Random random = new Random();
 

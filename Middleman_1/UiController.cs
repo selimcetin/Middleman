@@ -52,12 +52,14 @@ public class UiController
 
     public static void displayReport(Middleman middleman)
     {
-        Console.WriteLine($"Kontostand des letzten Tages: {middleman.BalancePreviousDay}");
-        Console.WriteLine($"Ausgaben für Einkaufe des letzten Tages: {middleman.BuyingCostPreviousDay}");
-        Console.WriteLine($"Einnahmen für Verkäufe des letzten Tages: {middleman.SalesPreviousDay}");
-        Console.WriteLine($"Lagerkosten des letzten Tages: {middleman.StorageCostPreviousDay}");
-        Console.WriteLine($"Aktueller Kontostand: {middleman.Balance}");
+        Console.WriteLine($"Kontostand des letzten Tages: {middleman.BalancePreviousDay:F2}");
+        Console.WriteLine($"Ausgaben für Einkaufe des letzten Tages: {middleman.BuyingCostPreviousDay:F2}");
+        Console.WriteLine($"Einnahmen für Verkäufe des letzten Tages: {middleman.SalesPreviousDay:F2}");
+        Console.WriteLine($"Lagerkosten des letzten Tages: {middleman.StorageCostPreviousDay:F2}");
+        Console.WriteLine($"Aktueller Kontostand: {middleman.Balance:F2}");
         printSeparator();
+
+        while (Console.ReadKey().Key != ConsoleKey.Enter) ;
     }
 
     public static void displayMenu(Middleman middleman, int day)

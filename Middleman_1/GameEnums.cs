@@ -2,7 +2,6 @@
 {
     public enum GameState
     {
-        Input,
         TurnStart,
         Menu,
         Buying_Product_Selection,
@@ -12,7 +11,6 @@
         UpgradeStorage_Amount,
         Transaction,
         TurnEnd,
-        GameEnd
     }
 
     public enum TransactionType

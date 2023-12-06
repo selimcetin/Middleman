@@ -18,7 +18,7 @@ namespace Middleman_1
 
             initializePlayerList(gameInfo);
 
-            MarketController.handleDailyProductionRateAdjustment(gameInfo.ProductList);
+            MarketController.adjustDailyProductionRate(gameInfo.ProductList);
         }
 
         static void initializePlayerList(GameInfo gameInfo)
@@ -93,6 +93,13 @@ namespace Middleman_1
             if (gameInfo.MiddlemanList.Count == 0) return true;
 
             return false;
+        }
+
+        public static void prepareNextDay(GameInfo gameInfo)
+        {
+            gameInfo.Day++;
+            gameInfo.CurrentPlayerIndex = 0;
+            Utils.leftShiftListOrder(gameInfo.MiddlemanList);
         }
     }
 }

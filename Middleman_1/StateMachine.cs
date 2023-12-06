@@ -16,16 +16,17 @@ namespace Middleman_1
                 {
                     gameInfo.CurrentMiddleman = gameInfo.MiddlemanList[gameInfo.CurrentPlayerIndex];
 
-                    // Handle the current state afterwards
-                    //------------------------------------
+                    // There are two breaking case:
+                    // Break: Next State is calculated from input
+                    // Continue: Next State is already given inside the case without input
+                    //--------------------------------------------------------------------
                     switch (gameInfo.GameState)
                     {
                         case GameState.TurnStart:
-                            UiController.displayReport(gameInfo.CurrentMiddleman);
                             gameInfo.GameState = GameState.Menu;
+                            handleTurnStart(gameInfo);
                             continue;
                         case GameState.Menu:
-                            MiddlemanController.resetPreviousDayVariables(gameInfo.CurrentMiddleman);
                             UiController.displayMenu(gameInfo.CurrentMiddleman, gameInfo.Day);
                             break;
                         case GameState.Buying_Product_Selection:
@@ -51,11 +52,12 @@ namespace Middleman_1
                             handleTransaction(gameInfo);
                             continue;
                         case GameState.TurnEnd:
+                            gameInfo.GameState = GameState.TurnStart;
                             handleTurnEnd(gameInfo);
                             continue;
                     }
-                    // continue will skip this code
-                    //-----------------------------
+                    // After break; (continue; wont reach until here):
+                    //------------------------------------------------
                     gameInfo.GameState = getNextStateFromInput(gameInfo);
                 }
                 catch (GameException ex)
@@ -76,12 +78,12 @@ namespace Middleman_1
 
         static GameState getNextStateFromInput(GameInfo gameInfo)
         {
-            string input = Console.ReadLine();
+            string input = UiController.getStringFromReadLinePrompt("Eingabe: ");
 
             switch (gameInfo.GameState)
             {
                 case GameState.Menu:
-                    return getNextStateDuringTurnStart(input);
+                    return getNextStateDuringMenu(input);
                 case GameState.Buying_Product_Selection:
                 case GameState.Selling_Product_Selection:
                     return getNextStateDuringProductSelection(gameInfo, input);
@@ -96,7 +98,7 @@ namespace Middleman_1
             }
         }
 
-        static GameState getNextStateDuringTurnStart(string input)
+        static GameState getNextStateDuringMenu(string input)
         {
             switch (input)
             {
@@ -169,10 +171,16 @@ namespace Middleman_1
             }
         }
 
+        static void handleTurnStart(GameInfo gameInfo)
+        {
+            UiController.displayReport(gameInfo.CurrentMiddleman);
+            MiddlemanController.resetPreviousDayVariables(gameInfo.CurrentMiddleman);
+        }
+
         static void handleTurnEnd(GameInfo gameInfo)
         {
             gameInfo.CurrentPlayerIndex++;
-            gameInfo.GameState = GameState.Menu;
+            
 
             // Day is over, start new Day
             //---------------------------
@@ -186,12 +194,9 @@ namespace Middleman_1
 
         static void executeChangesForNextDay(GameInfo gameInfo)
         {
-            gameInfo.Day++;
-            gameInfo.CurrentPlayerIndex = 0;
-
-            Utils.leftShiftListOrder(gameInfo.MiddlemanList);
-            MarketController.handleDailyProductionRateAdjustment(gameInfo.ProductList);
-            MarketController.handleDailyPriceAdjustment(gameInfo.ProductList);
+            GameController.prepareNextDay(gameInfo);
+            MarketController.adjustDailyProductionRate(gameInfo.ProductList);
+            MarketController.adjustDailyProductPrice(gameInfo.ProductList);
         }
     }
 }
