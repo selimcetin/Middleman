@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,25 +45,32 @@ namespace Middleman_1
 
         private static float getDiscountValueInDecimal(Middleman middleman, Product product)
         {
-            int quantity = middleman.Stock[product];
+            if (middleman.Stock.ContainsKey(product))
+            {
+                int quantity = middleman.Stock[product];
 
-            // 0% Discount
-            if (quantity > 0 && quantity <= 24)
-            {
-                return 0;
+                // 0% Discount
+                if (quantity > 0 && quantity <= 24)
+                {
+                    return 0;
+                }
+                // 2% Discount
+                if (quantity > 24 && quantity <= 50)
+                {
+                    return 0.02f;
+                }
+                // 5% Discount
+                if (quantity > 50 && quantity <= 74)
+                {
+                    return 0.05f;
+                }
+                // 10% Discount
+                return 0.1f;
             }
-            // 2% Discount
-            if (quantity > 24 && quantity <= 50)
-            {
-                return 0.02f;
-            }
-            // 5% Discount
-            if (quantity > 50 && quantity <= 74)
-            {
-                return 0.05f;
-            }
-            // 10% Discount
-            return 0.1f;
+
+            return 0;
+
+            
         }
 
         private static float getBuyingPriceAfterDiscount(Middleman middleman, Product product)
@@ -113,7 +121,7 @@ namespace Middleman_1
             // Cost for storage is 1$ per free space and 5$ per allocated space
             // Example storage situation: 10/110 --> cost = 10*50 + 100;
             //----------------------------------------------------------
-            float cost = middleman.getStockCount() * 5 + (middleman.StockCapacity - middleman.getStockCount());
+            float cost = middleman.StockCount * 5 + (middleman.StockCapacity - middleman.StockCount);
 
             if (hasEnoughBalance(middleman, cost))
             {

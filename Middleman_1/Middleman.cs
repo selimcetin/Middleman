@@ -108,17 +108,6 @@ namespace Middleman_1
             balancePreviousDay = balance;
         }
 
-        public int getStockCount()
-        {
-            int count = 0;
-            foreach (KeyValuePair<Product, int> entry in stock)
-            {
-                count += entry.Value;
-            }
-
-            return count;
-        }
-
         public override string? ToString()
         {
             return $"{name} der Firma {companyName}";
