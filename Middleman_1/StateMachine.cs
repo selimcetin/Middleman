@@ -21,6 +21,11 @@ namespace Middleman_1
                     switch (gameInfo.GameState)
                     {
                         case GameState.TurnStart:
+                            UiController.displayReport(gameInfo.CurrentMiddleman);
+                            gameInfo.GameState = GameState.Menu;
+                            continue;
+                        case GameState.Menu:
+                            MiddlemanController.resetPreviousDayVariables(gameInfo.CurrentMiddleman);
                             UiController.displayMenu(gameInfo.CurrentMiddleman, gameInfo.Day);
                             break;
                         case GameState.Buying_Product_Selection:
@@ -42,14 +47,15 @@ namespace Middleman_1
                             gameInfo.TransactionType = TransactionType.StorageUpgrade;
                             break;
                         case GameState.Transaction:
-                            gameInfo.GameState = GameState.TurnStart;
+                            gameInfo.GameState = GameState.Menu;
                             handleTransaction(gameInfo);
                             continue;
                         case GameState.TurnEnd:
                             handleTurnEnd(gameInfo);
                             continue;
                     }
-
+                    // continue will skip this code
+                    //-----------------------------
                     gameInfo.GameState = getNextStateFromInput(gameInfo);
                 }
                 catch (GameException ex)
@@ -74,7 +80,7 @@ namespace Middleman_1
 
             switch (gameInfo.GameState)
             {
-                case GameState.TurnStart:
+                case GameState.Menu:
                     return getNextStateDuringTurnStart(input);
                 case GameState.Buying_Product_Selection:
                 case GameState.Selling_Product_Selection:
@@ -84,7 +90,7 @@ namespace Middleman_1
                 case GameState.UpgradeStorage_Amount:
                     return getNextStateDuringAmountSelection(gameInfo, input);
                 case GameState.Transaction:
-                    return GameState.TurnStart;
+                    return GameState.Menu;
                 default:
                     throw new GameException("Etwas ist schief gelaufen :S");
             }
@@ -112,7 +118,7 @@ namespace Middleman_1
             switch (input)
             {
                 case "z":
-                    return GameState.TurnStart;
+                    return GameState.Menu;
                 default:
                     int inputValue = Utils.convertStringToInt(input);
 
@@ -166,7 +172,7 @@ namespace Middleman_1
         static void handleTurnEnd(GameInfo gameInfo)
         {
             gameInfo.CurrentPlayerIndex++;
-            gameInfo.GameState = GameState.TurnStart;
+            gameInfo.GameState = GameState.Menu;
 
             // Day is over, start new Day
             //---------------------------

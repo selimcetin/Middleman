@@ -16,6 +16,7 @@ namespace Middleman_1
             if (isValidPurchase(middleman, product, cost, quantity, out errorMessage))
             {
                 middleman.Balance -= cost;
+                middleman.BuyingCostPreviousDay += cost;
                 middleman.StockCount += quantity;
                 product.AvailableAmount -= quantity;
 
@@ -43,6 +44,7 @@ namespace Middleman_1
             if (isValidSelling(middleman.Stock[product], quantity))
             {
                 middleman.Balance += sellPrice;
+                middleman.SalesPreviousDay += sellPrice;
                 middleman.Stock[product] -= quantity;
                 middleman.StockCount -= quantity;
             }
@@ -64,6 +66,7 @@ namespace Middleman_1
                 int cost = quantity * upgradeCost;
                 middleman.StockCapacity += quantity;
                 middleman.Balance -= cost;
+                middleman.StorageCostPreviousDay += cost;
             }
             else
             {
@@ -81,6 +84,7 @@ namespace Middleman_1
             if (hasEnoughBalance(middleman, cost))
             {
                 middleman.Balance -= cost;
+                middleman.StorageCostPreviousDay += cost;
             }
             else
             {
@@ -145,6 +149,14 @@ namespace Middleman_1
                 return true;
 
             return false;
+        }
+
+        public static void resetPreviousDayVariables(Middleman middleman)
+        {
+            middleman.BalancePreviousDay = 0;
+            middleman.SalesPreviousDay = 0;
+            middleman.StorageCostPreviousDay = 0;
+            middleman.BalancePreviousDay = middleman.Balance;
         }
     }
 }

@@ -22,6 +22,7 @@ public class UiController
                 }
                 else
                 {
+                    printSeparator();
                     return value;
                 }
             }
@@ -39,7 +40,9 @@ public class UiController
     public static string getStringFromReadLinePrompt(string text)
     {
         Console.Write(text);
-        return Console.ReadLine();
+        string readLineText = Console.ReadLine();
+        printSeparator();
+        return readLineText;
     }
 
     static void printSeparator()

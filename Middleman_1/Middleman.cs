@@ -104,6 +104,8 @@ namespace Middleman_1
                     balance = 10000;
                     break;
             }
+
+            balancePreviousDay = balance;
         }
 
         public int getStockCount()
