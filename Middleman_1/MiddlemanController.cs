@@ -10,7 +10,7 @@ namespace Middleman_1
     {
         public static void buyProduct(Middleman middleman, Product product, int quantity)
         {
-            float cost = product.BuyingPrice * quantity;
+            float cost = getBuyingPriceAfterDiscount(middleman, product) * quantity;
 
             string errorMessage;
             if (isValidPurchase(middleman, product, cost, quantity, out errorMessage))
@@ -20,21 +20,55 @@ namespace Middleman_1
                 middleman.StockCount += quantity;
                 product.AvailableAmount -= quantity;
 
-                // If already in stock, increase quantity
-                if (middleman.Stock.ContainsKey(product))
-                {
-                    middleman.Stock[product] += quantity;
-                }
-                // Otherwise add it to stock
-                else
-                {
-                    middleman.Stock.Add(product, quantity);
-                }
+                putProductToStock(middleman, product, quantity);
             }
             else
             {
                 throw new GameException(errorMessage);
             }
+        }
+
+        private static void putProductToStock(Middleman middleman, Product product, int quantity)
+        {
+            // If already in stock, increase quantity
+            if (middleman.Stock.ContainsKey(product))
+            {
+                middleman.Stock[product] += quantity;
+            }
+            // Otherwise add it to stock
+            else
+            {
+                middleman.Stock.Add(product, quantity);
+            }
+        }
+
+        private static float getDiscountValueInDecimal(Middleman middleman, Product product)
+        {
+            int quantity = middleman.Stock[product];
+
+            // 0% Discount
+            if (quantity > 0 && quantity <= 24)
+            {
+                return 0;
+            }
+            // 2% Discount
+            if (quantity > 24 && quantity <= 50)
+            {
+                return 0.02f;
+            }
+            // 5% Discount
+            if (quantity > 50 && quantity <= 74)
+            {
+                return 0.05f;
+            }
+            // 10% Discount
+            return 0.1f;
+        }
+
+        private static float getBuyingPriceAfterDiscount(Middleman middleman, Product product)
+        {
+            float discountDecimal = 1 - getDiscountValueInDecimal(middleman, product);
+            return product.BuyingPrice * discountDecimal;
         }
 
         public static void sellProduct(Middleman middleman, Product product, int quantity)
