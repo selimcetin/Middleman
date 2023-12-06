@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Middleman_1
+namespace Middleman_Game
 {
     public class GameInfo
     {

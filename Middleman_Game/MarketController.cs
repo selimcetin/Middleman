@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Middleman_1
+namespace Middleman_Game
 {
     public static class MarketController
     {

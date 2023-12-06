@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace Middleman_1
+namespace Middleman_Game
 {
     public class Utils
     {
