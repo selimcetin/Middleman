@@ -59,6 +59,17 @@ namespace Middleman_Game
                 "Falsche Indexangabe für das Produkt. Bitte Index aus angezeigter Produktliste wählen.");
         }
 
+        public static Credit getCreditFromList(List<Credit> creditList, int index)
+        {
+            if (index <= creditList.Count)
+            {
+                return creditList[index - 1];
+            }
+
+            throw new GameException(
+                "Falsche Indexangabe für das Kredit. Bitte Index aus angezeigter Kreditliste wählen.");
+        }
+
         public static Product getProductFromStock(Middleman middleman, int index)
         {
             if (index <= middleman.Stock.Count())

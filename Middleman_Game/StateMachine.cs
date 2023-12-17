@@ -29,6 +29,10 @@ namespace Middleman_Game
                         case GameState.Menu:
                             UiController.displayMenu(gameInfo.CurrentMiddleman, gameInfo.Day);
                             break;
+                        case GameState.Credit_Selection:
+                            UiController.displayCreditOptions(gameInfo.CreditList);
+                            gameInfo.TransactionType = TransactionType.LendingCredit;
+                            break;
                         case GameState.Buying_Product_Selection:
                             UiController.displayBuyingOption(gameInfo.ProductList);
                             gameInfo.TransactionType = TransactionType.Buying;
@@ -84,6 +88,8 @@ namespace Middleman_Game
             {
                 case GameState.Menu:
                     return getNextStateDuringMenu(input);
+                case GameState.Credit_Selection:
+                    return getNextStateDuringCreditSelection(gameInfo, input);
                 case GameState.Buying_Product_Selection:
                 case GameState.Selling_Product_Selection:
                     return getNextStateDuringProductSelection(gameInfo, input);
@@ -108,6 +114,8 @@ namespace Middleman_Game
                     return GameState.Selling_Product_Selection;
                 case "l":
                     return GameState.UpgradeStorage_Amount;
+                case "k":
+                    return GameState.Credit_Selection;
                 case "b":
                     return GameState.TurnEnd;
                 default:
@@ -153,6 +161,19 @@ namespace Middleman_Game
             return GameState.TurnEnd;
         }
 
+        static GameState getNextStateDuringCreditSelection(GameInfo gameInfo, string input)
+        {
+            int inputValue = Utils.convertStringToInt(input);
+
+            if (inputValue > 0)
+            {
+                gameInfo.SelectedCredit = GameController.getCreditFromList(gameInfo.CreditList, inputValue);
+                return GameState.Transaction;
+            }
+
+            return GameState.TurnEnd;
+        }
+
         static void handleTransaction(GameInfo gameInfo)
         {
             switch (gameInfo.TransactionType)
@@ -167,6 +188,9 @@ namespace Middleman_Game
                     break;
                 case TransactionType.StorageUpgrade:
                     MiddlemanController.buyStockUpgrade(gameInfo.CurrentMiddleman, gameInfo.SelectedAmount);
+                    break;
+                case TransactionType.LendingCredit:
+                    MiddlemanController.getCredit(gameInfo.CurrentMiddleman, gameInfo.SelectedCredit);
                     break;
             }
         }

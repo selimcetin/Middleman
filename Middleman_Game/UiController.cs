@@ -69,6 +69,7 @@ public class UiController
         Console.WriteLine("e) Einkaufen");
         Console.WriteLine("v) Verkaufen");
         Console.WriteLine("l) Lagerkapazität erhöhen");
+        Console.WriteLine("k) Kredit aufnehmen");
         Console.WriteLine("b) Runde beenden");
         printSeparator();
     }
@@ -111,9 +112,9 @@ public class UiController
 
     static void displayProducts(List<Product> products)
     {
-        for (int i = 1; i <= products.Count; i++)
+        for (int i = 0; i < products.Count; i++)
         {
-            Console.WriteLine($"{i}) {products[i - 1].ToString()}");
+            Console.WriteLine($"{i+1}) {products[i].ToString()}");
         }
         printSeparator();
     }
@@ -149,6 +150,16 @@ public class UiController
         for (int i = 0; i < middlemanList.Count; i++)
         {
             Console.WriteLine($"Platz {i + 1}: {middlemanList[i].ToString()}");
+        }
+        printSeparator();
+    }
+
+    public static void displayCreditOptions(List<Credit> creditList)
+    {
+        for (int i = 0; i < creditList.Count; i++)
+        {
+            Credit credit = creditList[i];
+            Console.WriteLine($"{i + 1}) {credit.Sum} mit {credit.Percentage}. Rückzahlung nach 7 Tagen: {credit.Repayment}");
         }
         printSeparator();
     }

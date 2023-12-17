@@ -70,7 +70,7 @@ namespace Middleman_Game
 
             return 0;
 
-            
+
         }
 
         private static float getBuyingPriceAfterDiscount(Middleman middleman, Product product)
@@ -199,6 +199,16 @@ namespace Middleman_Game
             middleman.SalesPreviousDay = 0;
             middleman.StorageCostPreviousDay = 0;
             middleman.BalancePreviousDay = middleman.Balance;
+        }
+
+        public static void getCredit(Middleman middleman, Credit credit)
+        {
+            middleman.Credit = credit;
+        }
+
+        public static void payCredit(Middleman middleman)
+        {
+            
         }
     }
 }

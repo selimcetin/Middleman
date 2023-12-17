@@ -19,6 +19,7 @@ namespace Middleman_Game
         private float buyingCostPreviousDay;
         private float salesPreviousDay;
         private float storageCostPreviousDay;
+        private Credit? credit;
 
         public string Name
         {
@@ -79,7 +80,7 @@ namespace Middleman_Game
             get => storageCostPreviousDay;
             set => storageCostPreviousDay = value;
         }
-
+        public Credit? Credit { get => credit; set => credit = value; }
 
         public Middleman(string name, string companyName, int difficulty)
         {
@@ -88,6 +89,7 @@ namespace Middleman_Game
             stock = new Dictionary<Product, int>();
             stockCount = 0;
             stockCapacity = 100;
+            credit = null;
 
             switch (difficulty)
             {

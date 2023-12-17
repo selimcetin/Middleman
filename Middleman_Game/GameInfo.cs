@@ -22,7 +22,9 @@ namespace Middleman_Game
         private string projectDirectory;
         private List<Middleman> middlemanList;
         private List<Product> productList;
+        private List<Credit> creditList;
         private Product selectedProduct;
+        private Credit selectedCredit;
         private int selectedAmount;
         private int numberOfPlayers;
         
@@ -64,6 +66,12 @@ namespace Middleman_Game
             set => productList = value;
         }
 
+        public List<Credit> CreditList
+        {
+            get => creditList;
+            set => creditList = value;
+        }
+
         public Product SelectedProduct
         {
             get => selectedProduct;
@@ -74,6 +82,12 @@ namespace Middleman_Game
         {
             get => selectedAmount;
             set => selectedAmount = value;
+        }
+
+        public Credit SelectedCredit
+        {
+            get => selectedCredit;
+            set => selectedCredit = value;
         }
 
         public TransactionType TransactionType
@@ -94,6 +108,7 @@ namespace Middleman_Game
             set => numberOfPlayers = value;
         }
 
+
         private GameInfo()
         {
             currentPlayerIndex = 0;
@@ -101,9 +116,14 @@ namespace Middleman_Game
             gameState = GameState.TurnStart;
             selectedProduct = null;
             selectedAmount = -1;
+            selectedCredit = null;
 
             projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             middlemanList = new List<Middleman>();
+            creditList = new List<Credit>();
+            creditList.Add(new Credit(5000, 3));
+            creditList.Add(new Credit(10000, 5));
+            creditList.Add(new Credit(25000, 8));
             productList = Utils.parseYamlFile($"{projectDirectory}\\produkte.yml");
         }
 

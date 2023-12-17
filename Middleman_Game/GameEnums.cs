@@ -9,6 +9,7 @@
         Selling_Product_Selection,
         Selling_Amount,
         UpgradeStorage_Amount,
+        Credit_Selection,
         Transaction,
         TurnEnd,
     }
@@ -17,6 +18,7 @@
     {
         Buying,
         Selling,
-        StorageUpgrade
+        StorageUpgrade,
+        LendingCredit
     }
 }
