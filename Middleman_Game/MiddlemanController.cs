@@ -54,23 +54,24 @@ namespace Middleman_Game
                 {
                     return 0;
                 }
+
                 // 2% Discount
                 if (quantity > 24 && quantity <= 50)
                 {
                     return 0.02f;
                 }
+
                 // 5% Discount
                 if (quantity > 50 && quantity <= 74)
                 {
                     return 0.05f;
                 }
+
                 // 10% Discount
                 return 0.1f;
             }
 
             return 0;
-
-
         }
 
         private static float getBuyingPriceAfterDiscount(Middleman middleman, Product product)
@@ -130,8 +131,7 @@ namespace Middleman_Game
             }
             else
             {
-                GameController.removeMiddlemanFromList(gameInfo, middleman, middlemanList);
-                UiController.displayLosingMiddleman(middleman);
+                GameController.processBankruptMiddleman(gameInfo, middleman, middlemanList);
             }
         }
 
@@ -201,14 +201,33 @@ namespace Middleman_Game
             middleman.BalancePreviousDay = middleman.Balance;
         }
 
-        public static void getCredit(Middleman middleman, Credit credit)
+        public static void setMiddlemanCredit(Middleman middleman, Credit credit)
         {
             middleman.Credit = credit;
         }
 
-        public static void payCredit(Middleman middleman)
+        static void payCredit(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
         {
-            
+            float cost = middleman.Credit.Repayment;
+
+            if (hasEnoughBalance(middleman, cost))
+            {
+                middleman.Balance -= cost;
+            }
+            else
+            {
+                GameController.processBankruptMiddleman(gameInfo, middleman, middlemanList);
+            }
+        }
+
+        public static void updateCreditDueDay(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
+        {
+            middleman.Credit.DayDue--;
+
+            if (0 == middleman.Credit.DayDue)
+            {
+                payCredit(gameInfo, middleman, middlemanList);
+            }
         }
     }
 }

@@ -12,13 +12,37 @@ namespace Middleman_Game
         private float percentage;
         private float repayment;
         private int duration;
-        private int remainingDays;
+        private int dayDue;
 
-        public int Sum { get => sum; set => sum = value; }
-        public float Percentage { get => percentage; set => percentage = value; }
-        public float Repayment { get => repayment; set => repayment = value; }
-        public int Duration { get => duration; set => duration = value; }
-        public int RemainingDays { get => remainingDays; set => remainingDays = value; }
+        public int Sum
+        {
+            get => sum;
+            set => sum = value;
+        }
+
+        public float Percentage
+        {
+            get => percentage;
+            set => percentage = value;
+        }
+
+        public float Repayment
+        {
+            get => repayment;
+            set => repayment = value;
+        }
+
+        public int Duration
+        {
+            get => duration;
+            set => duration = value;
+        }
+
+        public int DayDue
+        {
+            get => dayDue;
+            set => dayDue = value;
+        }
 
         public Credit(int sum, float percentage)
         {
@@ -28,6 +52,5 @@ namespace Middleman_Game
             Duration = 7;
             RemainingDays = Duration;
         }
-
     }
 }

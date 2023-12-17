@@ -81,11 +81,18 @@ namespace Middleman_Game
                 "Falsche Indexangabe für das Produkt. Index muss <= Anzahl unterschiedlicher Produkte im Lager sein.");
         }
 
-
-        public static void removeMiddlemanFromList(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
+        public static void removeMiddlemanFromList(GameInfo gameInfo, Middleman middleman,
+            List<Middleman> middlemanList)
         {
             gameInfo.CurrentPlayerIndex--;
             middlemanList.Remove(middleman);
+        }
+
+        public static void processBankruptMiddleman(GameInfo gameInfo, Middleman middleman,
+            List<Middleman> middlemanList)
+        {
+            removeMiddlemanFromList(gameInfo, middleman, middlemanList);
+            UiController.displayLosingMiddleman(middleman);
         }
 
         public static bool isNextDay(List<Middleman> middlemanList, int currentPlayerIndex)

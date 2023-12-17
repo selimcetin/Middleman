@@ -60,6 +60,7 @@ namespace Middleman_Game
                             handleTurnEnd(gameInfo);
                             continue;
                     }
+
                     // After break; (continue; wont reach until here):
                     //------------------------------------------------
                     gameInfo.GameState = getNextStateFromInput(gameInfo);
@@ -100,7 +101,8 @@ namespace Middleman_Game
                 case GameState.Transaction:
                     return GameState.Menu;
                 default:
-                    throw new GameException("Etwas ist schief gelaufen :S");
+                    throw new GameException(
+                        "Etwas ist schief gelaufen. Dürfte eigentlich nicht in diesen default-case reinlaufen.");
             }
         }
 
@@ -133,7 +135,7 @@ namespace Middleman_Game
                     int inputValue = Utils.convertStringToInt(input);
 
                     // After selecting product, go to selecting amount
-                    //-----------------------------------------------------------
+                    //------------------------------------------------
                     if (GameState.Buying_Product_Selection == gameInfo.GameState)
                     {
                         gameInfo.SelectedProduct = GameController.getProductFromList(gameInfo.ProductList, inputValue);
@@ -163,15 +165,16 @@ namespace Middleman_Game
 
         static GameState getNextStateDuringCreditSelection(GameInfo gameInfo, string input)
         {
-            int inputValue = Utils.convertStringToInt(input);
-
-            if (inputValue > 0)
+            switch (input)
             {
-                gameInfo.SelectedCredit = GameController.getCreditFromList(gameInfo.CreditList, inputValue);
-                return GameState.Transaction;
-            }
+                case "z":
+                    return GameState.Menu;
+                default:
+                    int inputValue = Utils.convertStringToInt(input);
 
-            return GameState.TurnEnd;
+                    gameInfo.SelectedCredit = GameController.getCreditFromList(gameInfo.CreditList, inputValue);
+                    return GameState.Transaction;
+            }
         }
 
         static void handleTransaction(GameInfo gameInfo)
@@ -190,7 +193,7 @@ namespace Middleman_Game
                     MiddlemanController.buyStockUpgrade(gameInfo.CurrentMiddleman, gameInfo.SelectedAmount);
                     break;
                 case TransactionType.LendingCredit:
-                    MiddlemanController.getCredit(gameInfo.CurrentMiddleman, gameInfo.SelectedCredit);
+                    MiddlemanController.setMiddlemanCredit(gameInfo.CurrentMiddleman, gameInfo.SelectedCredit);
                     break;
             }
         }
@@ -204,7 +207,7 @@ namespace Middleman_Game
         static void handleTurnEnd(GameInfo gameInfo)
         {
             gameInfo.CurrentPlayerIndex++;
-            
+
 
             // Day is over, start new Day
             //---------------------------
@@ -214,6 +217,7 @@ namespace Middleman_Game
             }
 
             MiddlemanController.payDailyStorageCost(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
+            MiddlemanController.updateCreditDueDay(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
         }
 
         static void executeChangesForNextDay(GameInfo gameInfo)
