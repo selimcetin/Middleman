@@ -48,9 +48,9 @@ namespace Middleman_Game
         {
             this.sum = sum;
             this.percentage = percentage;
-            Repayment = sum * (percentage / 100);
+            Repayment = sum * (1 + percentage / 100);
             Duration = 7;
-            RemainingDays = Duration;
+            DayDue = Duration;
         }
     }
 }
