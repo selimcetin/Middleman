@@ -20,11 +20,9 @@ public class UiController
                 {
                     throw new GameException("Falsche Eingabe, bitte eine Zahl eingeben.");
                 }
-                else
-                {
-                    printSeparator();
-                    return value;
-                }
+
+                printSeparator();
+                return value;
             }
             catch (GameException ex)
             {
