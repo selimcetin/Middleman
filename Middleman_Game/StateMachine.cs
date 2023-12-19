@@ -78,7 +78,7 @@ namespace Middleman_Game
             // Game over
             //----------
             UiController.displayScoreboard(gameInfo.MiddlemanList);
-            Console.ReadKey();
+            Console.ReadKey(); // This is for waiting for an input before closing the Console Application
         }
 
         static GameState getNextStateFromInput(GameInfo gameInfo)
