@@ -204,6 +204,7 @@ namespace Middleman_Game
         public static void setMiddlemanCredit(Middleman middleman, Credit credit)
         {
             middleman.Credit = credit;
+            middleman.Balance += credit.Sum;
         }
 
         static void payCredit(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
