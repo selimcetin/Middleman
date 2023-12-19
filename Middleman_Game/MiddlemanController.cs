@@ -9,6 +9,25 @@ namespace Middleman_Game
 {
     public static class MiddlemanController
     {
+        public static void setInitialBalance(Middleman middleman, int difficulty)
+        {
+            switch (difficulty)
+            {
+                case 1:
+                    middleman.Balance = 15000;
+                    break;
+                case 2:
+                    middleman.Balance = 10000;
+                    break;
+                case 3:
+                    middleman.Balance = 7000;
+                    break;
+                default:
+                    middleman.Balance = 10000;
+                    break;
+            }
+        }
+
         public static void buyProduct(Middleman middleman, Product product, int quantity)
         {
             float cost = getBuyingPriceAfterDiscount(middleman, product) * quantity;
@@ -203,8 +222,15 @@ namespace Middleman_Game
 
         public static void setMiddlemanCredit(Middleman middleman, Credit credit)
         {
-            middleman.Credit = credit;
-            middleman.Balance += credit.Sum;
+            if (!hasActiveCredit(middleman))
+            {
+                middleman.Credit = credit;
+                middleman.Balance += credit.Sum;
+            }
+            else
+            {
+                throw new GameException($"{middleman.Name} hat bereits ein Kredit.");
+            }
         }
 
         static void payCredit(GameInfo gameInfo, Middleman middleman, List<Middleman> middlemanList)
@@ -229,6 +255,11 @@ namespace Middleman_Game
             {
                 payCredit(gameInfo, middleman, middlemanList);
             }
+        }
+
+        public static bool hasActiveCredit(Middleman middleman)
+        {
+            return (middleman.Credit != null);
         }
     }
 }

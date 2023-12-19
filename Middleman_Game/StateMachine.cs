@@ -213,16 +213,20 @@ namespace Middleman_Game
             //---------------------------
             if (GameController.isNextDay(gameInfo.MiddlemanList, gameInfo.CurrentPlayerIndex))
             {
-                executeChangesForNextDay(gameInfo);
+                applyChangesForNextDay(gameInfo);
             }
 
             MiddlemanController.payDailyStorageCost(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
-            MiddlemanController.updateCreditDueDay(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
+
+            if (MiddlemanController.hasActiveCredit(gameInfo.CurrentMiddleman))
+            {
+                MiddlemanController.updateCreditDueDay(gameInfo, gameInfo.CurrentMiddleman, gameInfo.MiddlemanList);
+            }
         }
 
-        static void executeChangesForNextDay(GameInfo gameInfo)
+        static void applyChangesForNextDay(GameInfo gameInfo)
         {
-            GameController.prepareNextDay(gameInfo);
+            GameController.updateGameInfoForNextDay(gameInfo);
             MarketController.adjustDailyProductionRate(gameInfo.ProductList);
             MarketController.adjustDailyProductPrice(gameInfo.ProductList);
         }

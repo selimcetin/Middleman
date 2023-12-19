@@ -113,7 +113,7 @@ namespace Middleman_Game
             return false;
         }
 
-        public static void prepareNextDay(GameInfo gameInfo)
+        public static void updateGameInfoForNextDay(GameInfo gameInfo)
         {
             gameInfo.Day++;
             gameInfo.CurrentPlayerIndex = 0;

@@ -44,7 +44,7 @@ namespace Middleman_Game
             get => stock;
             set => stock = value;
         }
-         
+
         public int StockCount
         {
             get => stockCount;
@@ -80,7 +80,12 @@ namespace Middleman_Game
             get => storageCostPreviousDay;
             set => storageCostPreviousDay = value;
         }
-        public Credit? Credit { get => credit; set => credit = value; }
+
+        public Credit? Credit
+        {
+            get => credit;
+            set => credit = value;
+        }
 
         public Middleman(string name, string companyName, int difficulty)
         {
@@ -90,24 +95,9 @@ namespace Middleman_Game
             stockCount = 0;
             stockCapacity = 100;
             credit = null;
-
-            switch (difficulty)
-            {
-                case 1:
-                    balance = 15000;
-                    break;
-                case 2:
-                    balance = 10000;
-                    break;
-                case 3:
-                    balance = 7000;
-                    break;
-                default:
-                    balance = 10000;
-                    break;
-            }
-
             balancePreviousDay = balance;
+
+            MiddlemanController.setInitialBalance(this, difficulty);
         }
 
         public override string? ToString()
