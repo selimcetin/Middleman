@@ -54,6 +54,8 @@ public class UiController
         Console.WriteLine($"Ausgaben für Einkaufe des letzten Tages: {middleman.BuyingCostPreviousDay:F2}");
         Console.WriteLine($"Einnahmen für Verkäufe des letzten Tages: {middleman.SalesPreviousDay:F2}");
         Console.WriteLine($"Lagerkosten des letzten Tages: {middleman.StorageCostPreviousDay:F2}");
+        Console.WriteLine(
+            $"Aktueller Kredit: {(null != middleman.Credit ? middleman.Credit.ToString() : "Kein Kredit vorhanden.")}");
         displayLineWithSeparator($"Aktueller Kontostand: {middleman.Balance:F2}");
 
         while (Console.ReadKey().Key != ConsoleKey.Enter) ;

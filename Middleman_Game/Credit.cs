@@ -52,5 +52,10 @@ namespace Middleman_Game
             Duration = 7;
             DayDue = Duration;
         }
+
+        public override string ToString()
+        {
+            return $"Summe: {Sum} | Wird abgezahlt in {DayDue} Tagen.";
+        }
     }
 }
